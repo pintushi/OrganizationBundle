@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit" table="pintushi_business_unit">
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="createdAt" column="created_at" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" column="updated_at" type="datetime" nullable="true">
+            <gedmo:timestampable on="update"/>
+        </field>
+
+        <field name="name" type="string" length="255" />
+
+        <many-to-one target-entity="Pintushi\Bundle\OrganizationBundle\Entity\Organization" field="organization" inversed-by="businessUnits">
+            <join-column name="organization_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <many-to-many target-entity="Pintushi\Bundle\UserBundle\Entity\User" field="users" mapped-by="businessUnits"/>
+
+        <many-to-one target-entity="Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit" field="owner">
+            <join-column name="business_unit_owner_id" referenced-column-name="id" on-delete="SET NULL"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

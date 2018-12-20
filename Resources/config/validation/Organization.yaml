@@ -1,0 +1,12 @@
+Pintushi\Bundle\OrganizationBundle\Entity\Organization:
+    properties:
+        name:
+            - NotBlank: { groups: ['pintushi'] }
+        subdomain:
+            - NotBlank: { groups: ['pintushi'] }
+            - Length:
+                groups: ['pintushi']
+                min: 5
+                max: 10
+        address:
+            - Valid: { groups : ["pintushi"] }

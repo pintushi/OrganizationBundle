@@ -1,0 +1,16 @@
+navigation:
+    menu_config:
+        items:
+            pintushi_organization_list:
+                label:          '组织列表'
+                uri:             ''
+                acl_resource_id: pintushi_organization_view
+                attributes:
+                    title:   '组织列表'
+                    icon:    ''
+                    no_cache: false
+        tree:
+            application_menu:
+                children:
+                    organization_list: ~
+

@@ -1,0 +1,116 @@
+imports:
+    - { resource: validator.yaml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Pintushi\Bundle\OrganizationBundle\:
+        resource: '../../{Repository,DataFixtures,Command}'
+
+    Pintushi\Bundle\OrganizationBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    Pintushi\Bundle\OrganizationBundle\Controller\ConfigurationController:
+        arguments:
+            - "@pintushi_config.organization"
+        tags: ['controller.service_arguments']
+
+    Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager:
+        class: Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@pintushi_security.token_accessor'
+            - '@Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository'
+            - '@pintushi.acl_helper'
+
+    pintushi_entity_config.provider.ownership_link:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: ?pintushi_entity_config.provider.ownership }
+
+    pintushi_organization.entity_manager.business_unit_link:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager }
+
+    pintushi_security.owner.ownership_metadata_provider.chain_link:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: pintushi_security.owner.ownership_metadata_provider.chain }
+
+    pintushi_security.ownership_tree_provider_link:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: pintushi_security.ownership_tree_provider }
+    pintushi.granted_info_accessor_link:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: Pintushi\Bundle\CoreBundle\Serializer\GrantedInfoAccessor }
+
+    pintushi_organization.entity_ownership.record_owner_data:
+        lazy: true
+        class: Pintushi\Bundle\OrganizationBundle\Ownership\RecordOwnerData
+        arguments:
+            - '@pintushi_security.token_accessor'
+            - '@pintushi_entity_config.provider.ownership_link'
+            - '@pintushi_organization.entity_manager.business_unit_link'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain_link'
+            - '@pintushi_security.ownership_tree_provider_link'
+            - '@pintushi.granted_info_accessor_link'
+
+    pintushi_organization.owner_assignment_checker.default:
+        class: 'Pintushi\Bundle\OrganizationBundle\Ownership\OwnerAssignmentChecker'
+        public: false
+
+    pintushi_organization.owner_deletion_manager:
+        class: 'Pintushi\Bundle\OrganizationBundle\Ownership\OwnerDeletionManager'
+        arguments:
+            - '@pintushi_organization.owner_assignment_checker.default'
+            - '@pintushi_entity_config.provider.ownership'
+            - '@pintushi_security.owner.ownership_metadata_provider'
+            - '@doctrine.orm.entity_manager'
+            - '@pintushi_security.acl.object_id_accessor'
+        lazy: true
+
+    Pintushi\Bundle\OrganizationBundle\Form\Extension\OwnerFormExtension:
+        arguments:
+           - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+           - '@pintushi_security.owner.ownership_metadata_provider'
+           - '@Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager'
+           - '@security.authorization_checker'
+           - '@pintushi_security.token_accessor'
+           - '@?security.acl.voter.basic_permissions'
+           - '@pintushi_security.ownership_tree_provider'
+           - '@pintushi_security.owner.entity_owner_accessor'
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+    Pintushi\Bundle\OrganizationBundle\Form\Extension\OrganizationFormExtension:
+        arguments:
+           - '@pintushi_security.token_accessor'
+           - '@security.authorization_checker'
+           - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+           - '@pintushi_security.owner.ownership_metadata_provider'
+           - '@pintushi_security.ownership_tree_provider'
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+
+    Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationType:
+        arguments:
+            - 'Pintushi\Bundle\OrganizationBundle\Entity\Organization'
+            - ['pintushi']
+        tags:
+            - { name: 'form.type' }
+
+    Pintushi\Bundle\OrganizationBundle\Provider\OrganizationConfigurationFormProvider:
+        autowire: true
+        autoconfigure: false
+        public: false
+        parent: 'pintushi_config.provider.abstract_provider'
+        lazy: true
+

@@ -1,0 +1,63 @@
+acls:
+    pintushi_organization_create:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\Organization
+        label: '创建组织'
+        permission: 'CREATE'
+        category: "organization"
+
+    pintushi_organization_view:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\Organization
+        label: '查看组织'
+        permission: 'VIEW'
+        category: "organization"
+
+    pintushi_organization_delete:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\Organization
+        label: '删除组织'
+        permission: 'DELETE'
+        category: "organization"
+
+    pintushi_organization_edit:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\Organization
+        label: '编辑组织'
+        permission: 'EDIT'
+        category: "organization"
+
+    pintushi_business_unit_create:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit
+        label: '创建组织'
+        permission: 'CREATE'
+        category: "organization"
+
+    pintushi_business_unit_view:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit
+        label: '查看组织'
+        permission: 'VIEW'
+        category: "organization"
+
+    pintushi_business_unit_delete:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit
+        label: '删除组织'
+        permission: 'DELETE'
+        category: "organization"
+
+    pintushi_business_unit_edit:
+        type: entity
+        class: Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit
+        label: '编辑组织'
+        permission: 'EDIT'
+        category: "organization"
+
+    update_organization_configuration:
+        label: "更改商户配置"
+        description: "更改商户配置"
+        type: action
+        group_name: ""
+        category: "application"

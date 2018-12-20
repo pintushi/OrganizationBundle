@@ -1,0 +1,4 @@
+app:
+    organization:
+        businessunit:
+            entity_label: 业务单元

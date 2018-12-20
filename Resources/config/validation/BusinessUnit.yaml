@@ -1,0 +1,7 @@
+Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
+  constraints:
+        - Pintushi\Bundle\OrganizationBundle\Validator\Constraints\BusinessUnitOwner: ~
+        - Pintushi\Bundle\OrganizationBundle\Validator\Constraints\ParentBusinessUnit: ~
+  properties:
+      name:
+          - NotBlank: { groups: ['pintushi'] }

@@ -1,0 +1,9 @@
+Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
+    attributes:
+        id:
+            groups: ['read']
+        name:
+            groups: ['read', 'write']
+        owner:
+            groups: ['Details']
+            max-depth: 1

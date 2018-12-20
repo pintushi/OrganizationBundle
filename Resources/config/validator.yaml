@@ -1,0 +1,29 @@
+services:
+    pintushi_organization.validator.organization_unique:
+        class: 'Pintushi\Bundle\OrganizationBundle\Validator\Constraints\OrganizationUniqueEntityValidator'
+        arguments:
+            - '@doctrine'
+            - '@pintushi_security.owner.ownership_metadata_provider'
+            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+        tags:
+              - { name: validator.constraint_validator, alias: organization_unique }
+
+    pintushi_organization.validator.owner:
+        class: Pintushi\Bundle\OrganizationBundle\Validator\Constraints\OwnerValidator
+        arguments:
+           - '@doctrine'
+           - '@pintushi_security.owner.ownership_metadata_provider'
+           - '@security.authorization_checker'
+           - '@pintushi_security.token_accessor'
+           - '@pintushi_security.ownership_tree_provider'
+           - '@?security.acl.voter.basic_permissions'
+           - '@Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager'
+        tags:
+            - { name: validator.constraint_validator, alias: owner_validator }
+
+    pintushi_organization.validator.parent_business_unit:
+        class: Pintushi\Bundle\OrganizationBundle\Validator\Constraints\ParentBusinessUnitValidator
+        arguments:
+           - '@pintushi_security.ownership_tree_provider'
+        tags:
+            - { name: validator.constraint_validator, alias: parent_business_unit_validator }

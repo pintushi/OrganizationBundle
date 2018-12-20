@@ -1,0 +1,9 @@
+entity_config:
+    ownership:
+        entity:
+            items:
+                owner_type:
+                    options:
+                        create_only:        true
+                        priority:           100
+                        indexed:            true

@@ -1,0 +1,89 @@
+system_configuration:
+    groups:
+        organization:
+            title: 设置
+            icon:  fa-hdd-o
+        wechat_settings:
+            icon:  fa-key
+            title: 微信
+        wechat:
+            icon:  fa-usd
+            title: 参数
+        alipay_settings:
+            icon:  fa-key
+            title: 支付宝
+        alipay:
+            icon:  fa-usd
+            title: 参数
+    fields:
+        pintushi_organization.wechat_app_id:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\TextType
+            search_type: text
+            priority: 40
+            options:
+                label:  App ID
+                resettable: false
+                required: true
+                constraints:
+                    - Symfony\Component\Validator\Constraints\NotBlank: ~
+        pintushi_organization.wechat_app_secret:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\TextType
+            search_type: text
+            priority: 40
+            options:
+                label:  App Secret
+                resettable: false
+                required: true
+                constraints:
+                    - Symfony\Component\Validator\Constraints\NotBlank: ~
+        pintushi_organization.alipay_app_id:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\TextType
+            search_type: text
+            priority: 40
+            options:
+                label:  App ID
+                resettable: false
+                required: true
+                constraints:
+                    - Symfony\Component\Validator\Constraints\NotBlank: ~
+        pintushi_organization.alipay_app_secret:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\TextType
+            search_type: text
+            priority: 40
+            options:
+                label:  App Secret
+                resettable: false
+                required: true
+                constraints:
+                    - Symfony\Component\Validator\Constraints\NotBlank: ~
+    tree:
+        organization_configuration:
+            organization:
+                children:
+                    general_setup:
+                        children:
+                            wechat_settings:
+                                priority: 100
+                                children:
+                                    wechat:
+                                        children:
+                                            - pintushi_organization.wechat_app_id
+                                            - pintushi_organization.wechat_app_secret
+                            alipay_settings:
+                                priority: 100
+                                children:
+                                    alipay:
+                                        children:
+                                            - pintushi_organization.alipay_app_id
+                                            - pintushi_organization.alipay_app_secret
+    section_tree:
+        wechat:
+            pintushi_organization.wechat_app_id: ~
+            pintushi_organization.wechat_app_secret: ~
+        alipay:
+            pintushi_organization.alipay_app_id: ~
+            pintushi_organization.alipay_app_secret: ~
