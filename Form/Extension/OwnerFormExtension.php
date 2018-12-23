@@ -30,6 +30,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Pintushi\Bundle\OrganizationBundle\Form\DataTransformer\EntityToIdTransformer;
 
 /**
  * Class OwnerFormExtension
@@ -152,6 +153,7 @@ class OwnerFormExtension extends AbstractTypeExtension
             $defaultOwner = $user;
         } elseif ($metadata->isBusinessUnitOwned()) {
             $this->addBusinessUnitOwnerField($builder, $user, $dataClassName);
+
             if (!$this->checkIsBusinessUnitEntity($dataClassName)) {
                 $defaultOwner = $this->getCurrentBusinessUnit(
                     $this->getOrganization()
@@ -187,7 +189,6 @@ class OwnerFormExtension extends AbstractTypeExtension
             ]
         );
     }
-
 
     /**
      * Process form after data is set and remove/disable owner field depending on permissions
@@ -272,19 +273,19 @@ class OwnerFormExtension extends AbstractTypeExtension
      * @param User                 $user
      * @param string               $className
      */
-    protected function addBusinessUnitOwnerField($builder, User $user, $className)
+    protected function addBusinessUnitOwnerField(FormBuilderInterface $builder, User $user, $className)
     {
         /**
          * Owner field is required for all entities except business unit
          */
         if (!$this->checkIsBusinessUnitEntity($className)) {
-            $validation      = [
+            $options      = [
                 'constraints' => [new NotBlank(['groups' => ['pintushi']])],
                 'required'    => true,
             ];
             $emptyValueLabel = 'pintushi.business_unit.form.choose_business_user';
         } else {
-            $validation       = [
+            $options       = [
                 'required' => false
             ];
             $emptyValueLabel  = 'pintushi.business_unit.form.none_business_user';
@@ -299,23 +300,22 @@ class OwnerFormExtension extends AbstractTypeExtension
             if ($this->authorizationChecker->isGranted('VIEW', 'entity:' . BusinessUnit::class)) {
                 $builder->add(
                     $this->fieldName,
-                    TextType::class
+                    TextType::class,
+                    $options
                 );
             } else {
                 // Add hidden input with default owner only during creation process,
                 // current user not able to modify this
-                if ($builder instanceof FormBuilder) {
-                    $transformer  = new EntityToIdTransformer(
-                        $this->doctrineHelper->getEntityManager(BusinessUnit::class),
-                        BusinessUnit::class
-                    );
-                    $builder->add(
-                        $this->fieldName,
-                        HiddenType::class
-                    );
-                    $builder->get($this->fieldName)->addModelTransformer($transformer);
-                }
+                $builder->add(
+                    $this->fieldName,
+                    HiddenType::class
+                );
             }
+            $transformer  = new EntityToIdTransformer(
+                $this->doctrineHelper->getEntityManager(BusinessUnit::class),
+                BusinessUnit::class
+            );
+            $builder->get($this->fieldName)->addModelTransformer($transformer);
         } else {
             $businessUnits = $user->getBusinessUnits();
             if (count($businessUnits)) {
@@ -337,7 +337,7 @@ class OwnerFormExtension extends AbstractTypeExtension
                             'label'                => $this->fieldLabel,
                             'translatable_options' => false
                         ],
-                        $validation
+                        $options
                     )
                 );
             }

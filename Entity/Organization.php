@@ -9,7 +9,7 @@ use Pintushi\Bundle\UserBundle\Entity\TimestampableTrait;
 use Pintushi\Bundle\UserBundle\Entity\ToggleableTrait;
 use Pintushi\Bundle\UserBundle\Entity\UserInterface;
 use Pintushi\Bundle\ShippingBundle\Entity\ShippingMethodInterface;
-use Pintushi\Bundle\FileBundle\Annotation as FileAnnoation;
+use Videni\Bundle\FileBundle\Annotation as FileAnnoation;
 
 /*
  *@Config(
