@@ -16,7 +16,7 @@ services:
            - '@security.authorization_checker'
            - '@pintushi_security.token_accessor'
            - '@pintushi_security.ownership_tree_provider'
-           - '@?security.acl.voter.basic_permissions'
+           - '@pintushi.acl.voter.basic_permissions'
            - '@Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager'
         tags:
             - { name: validator.constraint_validator, alias: owner_validator }

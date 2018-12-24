@@ -110,6 +110,7 @@ class OwnerValidator extends ConstraintValidator
             $context->buildViolation($constraint->message)
                 ->atPath($ownerFieldName)
                 ->setParameter('{{ owner }}', $ownerFieldName)
+                ->setParameter('{{ entityClass }}', $entityClass)
                 ->addViolation();
         }
     }

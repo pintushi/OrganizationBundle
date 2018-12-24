@@ -3,7 +3,7 @@
 namespace Pintushi\Bundle\OrganizationBundle\Repository;
 
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Pintushi\Bundle\CoreBundle\Doctrine\ORM\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Pagerfanta\Adapter\DoctrineORMAdapter;

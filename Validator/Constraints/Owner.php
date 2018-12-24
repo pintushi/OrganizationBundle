@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class Owner extends Constraint
 {
-    public $message = 'You have no access to set this value as {{ owner }}.';
+    public $message = 'The ownership {{ owner }} of entity {{ entityClass }} is not valid.';
 
     /**
      * {@inheritdoc}

@@ -269,11 +269,11 @@ class OwnerFormExtension extends AbstractTypeExtension
     }
 
     /**
-     * @param FormBuilderInterface $builder
+     * @param FormBuilderInterface| FormInterface $builder
      * @param User                 $user
      * @param string               $className
      */
-    protected function addBusinessUnitOwnerField(FormBuilderInterface $builder, User $user, $className)
+    protected function addBusinessUnitOwnerField($builder, User $user, $className)
     {
         /**
          * Owner field is required for all entities except business unit
@@ -306,16 +306,20 @@ class OwnerFormExtension extends AbstractTypeExtension
             } else {
                 // Add hidden input with default owner only during creation process,
                 // current user not able to modify this
-                $builder->add(
-                    $this->fieldName,
-                    HiddenType::class
-                );
+                if ($builder instanceof FormBuilder) {
+                    $builder->add(
+                        $this->fieldName,
+                        HiddenType::class
+                    );
+
+                    $transformer  = new EntityToIdTransformer(
+                        $this->doctrineHelper->getEntityManager(BusinessUnit::class),
+                        BusinessUnit::class
+                    );
+                    $builder->get($this->fieldName)->addModelTransformer($transformer);
+                }
             }
-            $transformer  = new EntityToIdTransformer(
-                $this->doctrineHelper->getEntityManager(BusinessUnit::class),
-                BusinessUnit::class
-            );
-            $builder->get($this->fieldName)->addModelTransformer($transformer);
+
         } else {
             $businessUnits = $user->getBusinessUnits();
             if (count($businessUnits)) {
