@@ -30,7 +30,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Pintushi\Bundle\OrganizationBundle\Form\DataTransformer\EntityToIdTransformer;
+use Videni\Bundle\RestBundle\Form\DataTransformer\EntityToIdTransformer;
 
 /**
  * Class OwnerFormExtension

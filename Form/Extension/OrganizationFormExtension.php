@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\EntityOwnerAccessor;
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OwnerFormSubscriber;
-use Pintushi\Bundle\OrganizationBundle\Form\DataTransformer\EntityToIdTransformer;
+use Videni\Bundle\RestBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
