@@ -77,9 +77,8 @@ class OrganizationFormExtension extends AbstractTypeExtension
 
         $organizationField = $metadata->getOrganizationFieldName();
         if ($this->authorizationChecker->isGranted('VIEW', 'entity:'. Organization::class)) {
-            $transformer =  new EntityToIdTransformer($this->doctrineHelper->getEntityManager(Organization::class), Organization::class);
             $builder->add($organizationField, TextType::class);
-            $builder->get($organizationField)->addModelTransformer($transformer);
+            $builder->get($organizationField)->addModelTransformer(new EntityToIdTransformer($this->doctrineHelper->getEntityManager(Organization::class), Organization::class));
         } else {
             $builder->add($organizationField, EntityType::class, [
                 'class'                => Organization::class,
