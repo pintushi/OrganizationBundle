@@ -10,15 +10,6 @@ services:
     Pintushi\Bundle\OrganizationBundle\:
         resource: '../../{Repository,DataFixtures,Command}'
 
-    Pintushi\Bundle\OrganizationBundle\Controller\:
-        resource: '../../Controller'
-        tags: ['controller.service_arguments']
-
-    Pintushi\Bundle\OrganizationBundle\Controller\ConfigurationController:
-        arguments:
-            - "@pintushi_config.organization"
-        tags: ['controller.service_arguments']
-
     Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager:
         class: Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager
         arguments:
