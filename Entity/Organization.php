@@ -30,6 +30,8 @@ class Organization implements OrganizationInterface
 
     protected $name;
 
+    protected $global;
+
     protected $subdomain;
 
     protected $description;
@@ -347,6 +349,26 @@ class Organization implements OrganizationInterface
     public function setSubdomain($subdomain)
     {
         $this->subdomain = strtolower($subdomain);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isGlobal()
+    {
+        return $this->global;
+    }
+
+    /**
+     * @param mixed $global
+     *
+     * @return self
+     */
+    public function setGlobal($global)
+    {
+        $this->global = $global;
 
         return $this;
     }

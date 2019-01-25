@@ -1,6 +1,6 @@
 <?php
 
-namespace Pintushi\Bundle\OrganizationBundle\Form\Type;
+namespace Pintushi\Bundle\OrganizationBundle\Ownership;
 
 class OwnershipType
 {

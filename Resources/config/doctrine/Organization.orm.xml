@@ -17,6 +17,7 @@
             <gedmo:timestampable on="update"/>
         </field>
         <field name="expiredAt" column="expired_at" type="datetime" nullable="true"/>
+        <field name="global" column="global" type="boolean" nullable="true"/>
         <field name="logo" column="logo" type="string" nullable="true"/>
         <field name="subdomain" column="subdomain" type="string" nullable="true" length="10"/>
         <field name="enabled" type="boolean" nullable="true"/>
