@@ -87,7 +87,7 @@ class OwnerFormSubscriber implements EventSubscriberInterface
 
         // if entity exists and assign is not granted - replace field with disabled text field,
         // otherwise - set default owner value
-        if ($isEntityExists) {
+        if ($isEntityExists && !$this->isAssignGranted) {
             $this->replaceOwnerField($form);
         } else {
             $this->setPredefinedOwner($form);
@@ -96,9 +96,6 @@ class OwnerFormSubscriber implements EventSubscriberInterface
 
     protected function replaceOwnerField(FormInterface $form): void
     {
-        if ($this->isAssignGranted) {
-            return;
-        }
         $owner = $form->get($this->fieldName)->getData();
         $ownerData = method_exists($owner, 'getName') ? $owner->getName() : (string)$owner;
 
