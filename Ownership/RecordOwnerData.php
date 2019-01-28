@@ -10,7 +10,7 @@ use Pintushi\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor;
 use Pintushi\Bundle\UserBundle\Entity\User;
 use Pintushi\Component\DependencyInjection\ServiceLink;
-use Pintushi\Bundle\OrganizationBundle\Form\Type\OwnershipType;
+use Pintushi\Bundle\OrganizationBundle\Ownership\OwnershipType;
 use Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
 use Pintushi\Bundle\SecurityBundle\Owner\OwnerTreeProvider;
