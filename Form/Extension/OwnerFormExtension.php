@@ -245,7 +245,7 @@ class OwnerFormExtension extends AbstractTypeExtension
 
             $builder->add(
                 $this->fieldName,
-                TextType::class,
+                HiddenType::class,
                 $options
             );
         }

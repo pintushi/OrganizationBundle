@@ -1,0 +1,24 @@
+search:
+    Pintushi\Bundle\OrganizationBundle\Entity\Organization:
+        alias:                          pintushi_organization
+        search_template:                PintushiOrganizationBundle:Search:organizationResult.html.twig
+        title_fields:                   [name]
+        fields:
+            -
+                name:                   name
+                target_type:            text
+                target_fields:          [name]
+
+    Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
+        alias:                          pintushi_business_unit
+        search_template:                PintushiOrganizationBundle:Search:businessUnitResult.html.twig
+        title_fields:                   [name]
+        fields:
+            -
+                name:                   id
+                target_type:            integer
+                target_fields:          [id]
+            -
+                name:                   name
+                target_type:            text
+                target_fields:          [name]

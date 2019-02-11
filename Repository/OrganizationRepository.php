@@ -15,4 +15,17 @@ class OrganizationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Organization::class);
     }
+
+    public function getGlobalOrganization()
+    {
+        $qb = $this
+            ->createQueryBuilder('o')
+            ->andWhere('o.global = true')
+        ;
+
+        return $qb
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

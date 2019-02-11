@@ -13,12 +13,12 @@ use Videni\Bundle\FileBundle\Annotation as FileAnnoation;
 
 /*
  *@Config(
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"="",
- *              "category"="account_management"
- *          }
+ *   defaultValues={
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"="",
+ *          "category"="account_management"
+ *   }
  * )
  * @FileAnnoation\File()
  */
