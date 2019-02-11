@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Doctrine\Common\Util\ClassUtils;
-use Pintushi\Bundle\SecurityBundle\SecurityFacade;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper;
@@ -20,9 +19,11 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\EntityOwnerAccessor;
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OwnerFormSubscriber;
+use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OrganizationFormSubscriber;
 use Videni\Bundle\RestBundle\Form\DataTransformer\EntityToIdTransformer;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationSelectType;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository;
 
 class OrganizationFormExtension extends AbstractTypeExtension
 {
@@ -38,16 +39,27 @@ class OrganizationFormExtension extends AbstractTypeExtension
     /** @var PropertyAccessor */
     protected $propertyAccessor;
 
+    private $requestStack;
+
+    private $organizationRepository;
+
     public function __construct(
         TokenAccessorInterface $tokenAccessor,
         AuthorizationCheckerInterface $authorizationChecker,
         DoctrineHelper $doctrineHelper,
-        OwnershipMetadataProviderInterface $ownershipMetadataProvider
+        OwnershipMetadataProviderInterface $ownershipMetadataProvider,
+        OrganizationRepository $organizationRepository
     ) {
         $this->tokenAccessor = $tokenAccessor;
         $this->authorizationChecker = $authorizationChecker;
         $this->doctrineHelper = $doctrineHelper;
         $this->ownershipMetadataProvider = $ownershipMetadataProvider;
+        $this->organizationRepository = $organizationRepository;
+    }
+
+    public function setRequestStack(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -74,11 +86,20 @@ class OrganizationFormExtension extends AbstractTypeExtension
         if (!$metadata  || !$metadata->hasOwner()) {
             return;
         }
+        // listener must be executed before validation
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit'], 128);
 
+        //show a disabled organization select for global organization
+        $isGlobalOrganization = $this->tokenAccessor->getOrganization()->isGlobal();
+        if (!$isGlobalOrganization) {
+            return;
+        }
         $organizationField = $metadata->getOrganizationFieldName();
+
         if ($this->authorizationChecker->isGranted('VIEW', 'entity:'. Organization::class)) {
-            $builder->add($organizationField, TextType::class);
-            $builder->get($organizationField)->addModelTransformer(new EntityToIdTransformer($this->doctrineHelper->getEntityManager(Organization::class), Organization::class));
+            $builder->add($organizationField, OrganizationSelectType::class, [
+                'disabled' => true
+            ]);
         } else {
             $builder->add($organizationField, EntityType::class, [
                 'class'                => Organization::class,
@@ -90,9 +111,16 @@ class OrganizationFormExtension extends AbstractTypeExtension
 
                     return $qb;
                 },
-                'mapped'               => true,
+                'disabled'               => false,
             ]);
         }
+
+        $builder->addEventSubscriber(new OrganizationFormSubscriber(
+            $organizationField,
+            $this->requestStack,
+            $this->organizationRepository,
+            $this->getPropertyAccessor()
+        ));
 
         $isAssignGranted = $this->authorizationChecker->isGranted('ASSIGN', 'entity:'. $dataClassName);
         $builder->addEventSubscriber(
@@ -104,8 +132,6 @@ class OrganizationFormExtension extends AbstractTypeExtension
                 $this->tokenAccessor->getOrganization()
             )
         );
-        // listener must be executed before validation
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit'], 128);
     }
 
     /**
