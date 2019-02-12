@@ -10,6 +10,7 @@ use Pintushi\Bundle\UserBundle\Entity\ToggleableTrait;
 use Pintushi\Bundle\UserBundle\Entity\UserInterface;
 use Pintushi\Bundle\ShippingBundle\Entity\ShippingMethodInterface;
 use Videni\Bundle\FileBundle\Annotation as FileAnnoation;
+use Videni\Bundle\RestBundle\Model\ResourceInterface;
 
 /*
  *@Config(
@@ -22,7 +23,7 @@ use Videni\Bundle\FileBundle\Annotation as FileAnnoation;
  * )
  * @FileAnnoation\File()
  */
-class Organization implements OrganizationInterface
+class Organization implements OrganizationInterface, ResourceInterface
 {
     use TimestampableTrait, ToggleableTrait;
 
