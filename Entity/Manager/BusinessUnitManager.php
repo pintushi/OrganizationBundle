@@ -44,6 +44,11 @@ class BusinessUnitManager
         $this->aclHelper = $aclHelper;
     }
 
+    public function getBusinessUnitRepo()
+    {
+        return $this->businessUnitRepository;
+    }
+
     /**
      * Get Business Units tree
      *

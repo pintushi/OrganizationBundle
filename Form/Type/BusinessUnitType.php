@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class BusinessUnitType extends AbstractType
 {
-    const FORM_NAME = 'oro_business_unit';
+    const FORM_NAME = 'pintushi_business_unit';
 
     /** @var BusinessUnitManager */
     protected $businessUnitManager;
@@ -47,7 +47,7 @@ class BusinessUnitType extends AbstractType
                 'name',
                 TextType::class,
                 [
-                    'label'    => 'oro.organization.businessunit.name.label',
+                    'label'    => 'pintushi.organization.businessunit.name.label',
                     'required' => true,
                 ]
             )
@@ -56,7 +56,7 @@ class BusinessUnitType extends AbstractType
                 HiddenType::class,
                 [
                     'required' => false,
-                    'label' => 'oro.organization.businessunit.parent.label',
+                    'label' => 'pintushi.organization.businessunit.parent.label',
                 ]
             )
         ;
@@ -82,14 +82,14 @@ class BusinessUnitType extends AbstractType
                 BusinessUnitSelectAutocomplete::class,
                 [
                     'required' => false,
-                    'label' => 'oro.organization.businessunit.parent.label',
+                    'label' => 'pintushi.organization.businessunit.parent.label',
                     'autocomplete_alias' => 'parent-business-units',
-                    'placeholder' => 'oro.business_unit.form.none_business_user',
+                    'placeholder' => 'pintushi.business_unit.form.none_business_user',
                     'configs' => [
                         'multiple' => false,
                         'component'   => 'parent-business-units-autocomplete',
                         'width'       => '400px',
-                        'placeholder' => 'oro.dashboard.form.choose_business_unit',
+                        'placeholder' => 'pintushi.dashboard.form.choose_business_unit',
                         'allowClear'  => true,
                         'entity_id' => $entity->getId()
                     ]

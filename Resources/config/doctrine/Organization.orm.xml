@@ -5,8 +5,11 @@
                   xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                                       http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-
-    <entity name="Pintushi\Bundle\OrganizationBundle\Entity\Organization" table="pintushi_organization">
+    <mapped-superclass
+        name="Pintushi\Bundle\OrganizationBundle\Entity\Organization"
+        repository_class="Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository"
+        table="pintushi_organization"
+        >
         <id name="id" column="id" type="integer">
             <generator strategy="AUTO" />
         </id>
@@ -23,6 +26,7 @@
         <field name="enabled" type="boolean" nullable="true"/>
         <field name="name" Ptype="string"  nullable="true"/>
         <field name="description" type="string" nullable="true"/>
+
         <one-to-many target-entity="Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit" field="businessUnits" mapped-by="organization">
         </one-to-many>
         <many-to-many field="users"  target-entity="Pintushi\Bundle\UserBundle\Entity\User" fetch="LAZY" mapped-by="organizations">
@@ -35,16 +39,5 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <one-to-one field="address" target-entity="Pintushi\Bundle\AddressBundle\Entity\Address" >
-            <cascade>
-                <cascade-persist/>
-            </cascade>
-            <join-column name="address_id" referenced-column-name="id" nullable="true" on-delete="SET NULL"/>
-        </one-to-one>
-         <one-to-many field="shippingMethods" target-entity="Pintushi\Bundle\ShippingBundle\Entity\ShippingMethod"  index-by="type" mapped-by="organization" orphan-removal="true">
-            <cascade>
-                <cascade-all/>
-            </cascade>
-        </one-to-many>
-    </entity>
+    </mapped-superclass>
 </doctrine-mapping>

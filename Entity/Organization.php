@@ -43,20 +43,15 @@ class Organization implements OrganizationInterface, ResourceInterface
 
     protected $users;
 
-    protected $address;
-
     /**
      * @FileAnnoation\Link()
      */
     protected $logo;
 
-    protected $shippingMethods;
-
     public function __construct()
     {
         $this->businessUnits = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->shippingMethods = new ArrayCollection();
     }
 
     /**
@@ -256,44 +251,6 @@ class Organization implements OrganizationInterface, ResourceInterface
         return $this;
     }
 
-     /**
-     * {@inheritdoc}
-     */
-    public function hasShippingMethod(ShippingMethodInterface $shippingMethod)
-    {
-        return $this->shippingMethods->contains($shippingMethod);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getShippingMethods()
-    {
-        return $this->shippingMethods;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addShippingMethod(ShippingMethodInterface $shippingMethod)
-    {
-        if (!$this->hasShippingMethod($shippingMethod)) {
-            $shippingMethod->setOrganization($this);
-            $this->shippingMethods->add($shippingMethod);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function removeShippingMethod(ShippingMethodInterface $shippingMethod)
-    {
-        if ($this->hasShippingMethod($shippingMethod)) {
-            $shippingMethod->setOrganization(null);
-            $this->shippingMethods->remove($shippingMethod);
-        }
-    }
-
     /**
      * @return mixed
      */
@@ -310,26 +267,6 @@ class Organization implements OrganizationInterface, ResourceInterface
     public function setLogo($logo)
     {
         $this->logo = $logo;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param mixed $address
-     *
-     * @return self
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
 
         return $this;
     }

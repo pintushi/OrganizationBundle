@@ -3,15 +3,23 @@
 namespace Pintushi\Bundle\OrganizationBundle\Repository;
 
 use Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 use Videni\Bundle\RestBundle\Doctrine\ORM\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 
 class BusinessUnitRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, BusinessUnit::class);
+    private $organizationEntityClass;
+
+    public function __construct(
+        ManagerRegistry $registry,
+        $businessUnitEntityClass = BusinessUnit::class,
+        $organizationEntityClass = Organization::class
+    ) {
+        parent::__construct($registry, $businessUnitEntityClass);
+
+        $this->organizationEntityClass = $organizationEntityClass;
     }
 
     /**
@@ -100,7 +108,7 @@ class BusinessUnitRepository extends ServiceEntityRepository
         $tree          = [];
         $businessUnits = $this->getBusinessUnitsTree();
 
-        $organizations = $this->_em->getRepository('OroOrganizationBundle:Organization')
+        $organizations = $this->_em->getRepository($this->organizationEntityClass)
             ->getOrganizationsPartialData(
                 ['id', 'name', 'enabled'],
                 $sortOrder,

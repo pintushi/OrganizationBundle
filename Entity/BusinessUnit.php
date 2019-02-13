@@ -4,7 +4,6 @@ namespace Pintushi\Bundle\OrganizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Pintushi\Bundle\UserBundle\Entity\User;
 use Pintushi\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Videni\Bundle\RestBundle\Model\ResourceInterface;

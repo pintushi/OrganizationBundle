@@ -1,0 +1,24 @@
+{
+    "name": "pintushi/organization-bundle",
+    "type": "symfony-bundle",
+    "description": "Pintushi Organization Bundle",
+    "keywords": ["Organization"],
+    "license": "MIT",
+    "require": {
+        "php": "^7.1",
+        "symfony/symfony": "^4.0",
+        "pintushi/security-bundle": "^1.0@dev",
+        "pintushi/entity-config-bundle": "^1.0@dev",
+        "pintushi/form-bundle": "^1.0@dev",
+        "videni/file-bundle": "^1.0@dev"
+    },
+    "autoload": {
+        "psr-0": { "Pintushi\\Bundle\\OrganizationBundle": "" }
+    },
+    "target-dir": "Pintushi/Bundle/OrganizationBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

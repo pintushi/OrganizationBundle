@@ -5,8 +5,11 @@
                   xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                                       http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-
-    <entity name="Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit" table="pintushi_business_unit">
+    <entity
+        name="Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit"
+        repository_class="Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository"
+        table="pintushi_business_unit"
+        >
         <id name="id" column="id" type="integer">
             <generator strategy="AUTO" />
         </id>

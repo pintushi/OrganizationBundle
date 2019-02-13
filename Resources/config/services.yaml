@@ -1,5 +1,7 @@
 imports:
     - { resource: validator.yaml }
+    - { resource: form_types.yaml }
+    - { resource: autocomplete.yaml }
 
 services:
     _defaults:
@@ -9,6 +11,12 @@ services:
 
     Pintushi\Bundle\OrganizationBundle\:
         resource: '../../{Repository,DataFixtures,Command}'
+
+    Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository:
+        arguments:
+            - '@Doctrine\Common\Persistence\ManagerRegistry'
+            - '%videni_rest.entity.business_unit.class%'
+            - '%videni_rest.entity.organization.class%'
 
     Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager:
         class: Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager
@@ -107,17 +115,5 @@ services:
         autoconfigure: false
         public: false
         parent: 'pintushi_config.provider.abstract_provider'
-        lazy: true
-
-     # Autocomplete user organizations search handler
-    Pintushi\Bundle\OrganizationBundle\Autocomplete\OrganizationSearchHandler:
-        arguments:
-            - 'Pintushi\Bundle\OrganizationBundle\Entity\Organization'
-            - ["id", "name"]
-            - ["name"]
-            - '@doctrine'
-            - '@pintushi_security.token_accessor'
-        tags:
-            - { name: pintushi_form.autocomplete.search_handler, alias: user_organizations }
         lazy: true
 

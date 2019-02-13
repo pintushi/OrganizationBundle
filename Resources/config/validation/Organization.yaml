@@ -8,5 +8,3 @@ Pintushi\Bundle\OrganizationBundle\Entity\Organization:
                 groups: ['pintushi']
                 min: 5
                 max: 10
-        address:
-            - Valid: { groups : ["pintushi"] }

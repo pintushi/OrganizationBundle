@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Pintushi\Bundle\OrganizationBundle\Form\Type\BusinessUnitSelectAutocomplete:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - 'Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit'
+            - '@Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager'
+        tags:
+            - { name: form.type, alias: "pintushi_type_business_unit_select_autocomplete" }
+
+    Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationsSelectType: ~
+

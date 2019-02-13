@@ -1,0 +1,30 @@
+services:
+     # Autocomplete user organizations search handler
+    Pintushi\Bundle\OrganizationBundle\Autocomplete\OrganizationSearchHandler:
+        arguments:
+            - 'Pintushi\Bundle\OrganizationBundle\Entity\Organization'
+            - ["id", "name"]
+            - ["name"]
+            - '@doctrine'
+            - '@pintushi_security.token_accessor'
+        tags:
+            - { name: pintushi_form.autocomplete.search_handler, alias: user_organizations }
+        lazy: true
+
+    Pintushi\Bundle\OrganizationBundle\Autocomplete\BusinessUnitOwnerSearchHandler:
+        parent: Pintushi\Bundle\FormBundle\Autocomplete\SearchHandler
+        arguments:
+            - 'Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit'
+            - ["name"]
+            - '@doctrine'
+        tags:
+            - { name: pintushi_form.autocomplete.search_handler, alias: business_units_owner_search_handler }
+        lazy: true
+
+    Pintushi\Bundle\OrganizationBundle\Autocomplete\BusinessUnitTreeSearchHandler:
+        parent: Pintushi\Bundle\OrganizationBundle\Autocomplete\BusinessUnitOwnerSearchHandler
+        calls:
+            - [setTokenAccessor, ['@pintushi_security.token_accessor']]
+        tags:
+            - { name: pintushi_form.autocomplete.search_handler, alias: business_units_tree_search_handler }
+        lazy: true

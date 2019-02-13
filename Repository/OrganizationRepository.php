@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class OrganizationRepository extends ServiceEntityRepository
 {
@@ -98,5 +99,36 @@ class OrganizationRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder->getQuery()->execute();
+    }
+
+     /**
+     * Returns partial organizations data
+     *
+     * @param array $fields    array with fields should be returned
+     * @param array $sortOrder order condition
+     * @param array $ids array with organizations ids data should be limited
+     *
+     * @return array
+     */
+    public function getOrganizationsPartialData(array $fields, array $sortOrder = [], array $ids = [])
+    {
+        array_walk($fields, [QueryBuilderUtil::class, 'checkIdentifier']);
+        $organizationsQueryQB = $this->createQueryBuilder('org')
+            ->select(sprintf('partial org.{%s}', implode(', ', $fields)));
+        if (count($sortOrder) !== 0) {
+            foreach ($sortOrder as $fieldName => $direction) {
+                $organizationsQueryQB->addOrderBy(
+                    QueryBuilderUtil::getField('org', $fieldName),
+                    QueryBuilderUtil::getSortOrder($direction)
+                );
+            }
+        }
+
+        if (count($ids) !== 0) {
+            $organizationsQueryQB->where('org.id in (:ids)')
+                ->setParameter('ids', $ids);
+        }
+
+        return $organizationsQueryQB->getQuery()->getArrayResult();
     }
 }

@@ -5,7 +5,7 @@ namespace Pintushi\Bundle\OrganizationBundle\Ownership;
 use Doctrine\ORM\EntityManager;
 use Pintushi\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
-use Pintushi\Bundle\OrganizationBundle\Ownership\OwnershipType;
+use Pintushi\Bundle\OrganizationBundle\Form\Type\OwnershipType;
 use Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdAccessor;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 
