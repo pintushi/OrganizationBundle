@@ -17,7 +17,7 @@ use Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
 use Pintushi\Bundle\SecurityBundle\Owner\OwnerTreeProvider;
 use Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit;
-use Pintushi\Bundle\CoreBundle\Serializer\GrantedInfoAccessor;
+use Pintushi\Bundle\SecurityBundle\Helper\GrantedInfoHelper;
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 
 /**

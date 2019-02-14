@@ -48,7 +48,7 @@ services:
     pintushi.granted_info_accessor_link:
         class: Pintushi\Component\DependencyInjection\ServiceLink
         tags:
-            - { name: service_link, service: Pintushi\Bundle\CoreBundle\Serializer\GrantedInfoAccessor }
+            - { name: service_link, service: Pintushi\Bundle\SecurityBundle\Helper\GrantedInfoHelper }
 
     Pintushi\Bundle\OrganizationBundle\EventListener\ResourceOwnershipListener:
         lazy: true
