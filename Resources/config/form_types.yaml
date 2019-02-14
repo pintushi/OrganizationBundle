@@ -14,3 +14,9 @@ services:
 
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationsSelectType: ~
 
+    Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationType:
+        arguments:
+            - '%videni_rest.entity.organization.class'
+            - []
+            - '@videni_rest.repository.organization'
+
