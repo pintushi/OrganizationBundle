@@ -15,8 +15,8 @@ services:
     Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository:
         arguments:
             - '@Doctrine\Common\Persistence\ManagerRegistry'
-            - '%videni_rest.entity.business_unit.class%'
-            - '%videni_rest.entity.organization.class%'
+            - '%pintushi.entity.business_unit.class%'
+            - '%pintushi.entity.organization.class%'
 
     Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager:
         class: Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager
