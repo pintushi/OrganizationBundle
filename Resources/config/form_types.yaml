@@ -20,3 +20,7 @@ services:
             - []
             - '@videni_rest.repository.organization'
 
+    Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationProfileType:
+        arguments:
+            - '%videni_rest.entity.organization.class'
+            - []
