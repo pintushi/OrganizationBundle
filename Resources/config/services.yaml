@@ -77,6 +77,9 @@ services:
             - '@pintushi_security.acl.object_id_accessor'
         lazy: true
 
+    Pintushi\Bundle\OrganizationBundle\Ownership\OwnerDeletionManager:
+        alias:  pintushi_organization.owner_deletion_manager
+
     Pintushi\Bundle\OrganizationBundle\Form\Extension\OwnerFormExtension:
         arguments:
            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
@@ -116,4 +119,7 @@ services:
         public: false
         parent: 'pintushi_config.provider.abstract_provider'
         lazy: true
+
+    Pintushi\Bundle\OrganizationBundle\DataPersister\DataPersister:
+        decorates: Videni\Bundle\RestBundle\EventListener\DataPersister
 
