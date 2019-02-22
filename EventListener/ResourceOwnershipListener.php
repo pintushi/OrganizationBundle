@@ -2,7 +2,6 @@
 
 namespace Pintushi\Bundle\OrganizationBundle\EventListener;
 
-
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;

@@ -123,3 +123,7 @@ services:
     Pintushi\Bundle\OrganizationBundle\DataPersister\DataPersister:
         decorates: Videni\Bundle\RestBundle\EventListener\DataPersister
 
+    Pintushi\Bundle\OrganizationBundle\EventListener\AfterFormResolveListener:
+        tags:
+           - { name: "kernel.event_listener", event: 'videni.form_listener.after_form_resolve', method: 'onFormResolved' }
+
