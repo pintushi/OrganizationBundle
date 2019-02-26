@@ -24,29 +24,29 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@pintushi_security.token_accessor'
             - '@Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository'
-            - '@pintushi.acl_helper'
+            - '@pintushi_security.acl_helper'
 
     pintushi_entity_config.provider.ownership_link:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: ?pintushi_entity_config.provider.ownership }
 
     pintushi_organization.entity_manager.business_unit_link:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager }
 
     pintushi_security.owner.ownership_metadata_provider.chain_link:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: pintushi_security.owner.ownership_metadata_provider.chain }
 
     pintushi_security.ownership_tree_provider_link:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: pintushi_security.ownership_tree_provider }
     pintushi.granted_info_accessor_link:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: Pintushi\Bundle\SecurityBundle\Helper\GrantedInfoHelper }
 
