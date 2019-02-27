@@ -1,0 +1,29 @@
+api:
+    resources:
+        Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
+            scope: pintushi
+            normalization_context:
+                 groups: ["BusinessUnit"]
+            validation_groups:  ["pintushi"]
+            route_prefix: /admin
+            operations:
+                create:
+                    action: create
+                    access_control: is_granted('pintushi_business_unit_create')
+                index:
+                    action: index
+                    acl_enabled: true
+                    access_control: is_granted('pintushi_business_unit_view')
+                    normalization_context:
+                       groups: ["Default", "BusinessUnit"]
+                update:
+                    action: update
+                    access_control: is_granted('pintushi_business_unit_edit', object)
+                view:
+                    action: view
+                    access_control: is_granted('pintushi_business_unit_view', object)
+                    normalization_context:
+                        groups: ["read", "Details"]
+                delete:
+                    action: delete
+                    access_control: is_granted('pintushi_business_unit_delete', object)
