@@ -1,7 +1,7 @@
 api:
     resources:
         Pintushi\Bundle\CoreBundle\Entity\Organization:
-            scope: pintushi
+            scope: pintushi_organization
             normalization_context:
                 groups: [Organization]
             validation_groups:  ["pintushi"]
@@ -22,6 +22,7 @@ api:
                         id: 0
                 index:
                     action: index
+                    grid: orgnaization-grid
                     access_control: is_granted('pintushi_organization_view')
                     normalization_context:
                         groups: [Organization, Default]

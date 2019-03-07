@@ -1,0 +1,138 @@
+grids:
+    business-unit-grid:
+        extended_entity_name: '%pintushi_organization.entity.business_unit.class%'
+        options:
+            entityHint: business
+            entity_pagination: true
+            mass_actions:
+                delete:
+                    enabled: false
+        acl_resource: pintushi_business_unit_view
+        source:
+            type: orm
+            skip_acl_apply: false
+            query_builder: '@pintushi_organization.repository.business_unit->createListQueryBuilder'
+            hints:
+                - HINT_TRANSLATABLE
+        columns:
+            name:
+                label: pintushi.organization.businessunit.name.label
+            ownerName:
+                label: pintushi.organization.businessunit.owner.label
+                path: owner.name
+            createdAt:
+                label:  pintushi.ui.created_at
+                type: datetime
+            id: ~
+        sorters:
+            columns:
+                name:
+                    path: o.name
+                ownerName:
+                    path: owner.name
+                createdAt:
+                    path: o.createdAt
+            default:
+                name: '%pintushi_grid.extension.orm_sorter.class%::DIRECTION_ASC'
+        filters:
+            columns:
+                name:
+                    type: string
+                    path: o.name
+                businessUnitId:
+                    label: pintushi.business_unit.label
+                    type: choice-tree
+                    autocomplete_alias: business_units_tree_search_handler
+                    path: o.owner
+                    className: 'Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                createdAt:
+                    type: datetime
+                    path: o.createdAt
+        actions:
+            view:
+                type:          navigate
+                label:         pintushi.grid.action.view
+                link:          view_link
+                icon:          eye
+                acl_resource:  pintushi_business_unit_view
+                rowAction:     true
+            update:
+                type:          navigate
+                label:         pintushi.grid.action.update
+                link:          update_link
+                icon:          pencil-square-o
+                acl_resource:  pintushi_business_unit_update
+            delete:
+                type:          delete
+                label:         pintushi.grid.action.delete
+                link:          delete_link
+                icon:          trash-o
+                acl_resource:  pintushi_business_unit_delete
+
+    organization-grid:
+        extended_entity_name: '%pintushi_organization.entity.organization.class%'
+        options:
+            entityHint: organization
+            entity_pagination: true
+            mass_actions:
+                delete:
+                    enabled: false
+        acl_resource: pintushi_organization_view
+        source:
+            type: orm
+            skip_acl_apply: false
+            query_builder: '@pintushi_organization.repository.business_unit->createListQueryBuilder'
+            hints:
+                - HINT_TRANSLATABLE
+        columns:
+            id: ~
+            name:
+                label: pintushi.organization.organization.name.label
+            global:
+                label: pintushi.organization.organization.global.label
+                path: owner.name
+                type: boolean
+            createdAt:
+                label:  pintushi.ui.created_at
+                type: datetime
+            expiredAt:
+                label:  pintushi.ui.expiredAt
+                type: datetime
+        sorters:
+            columns:
+                name:
+                    path: o.name
+                createdAt:
+                    path: o.createdAt
+                expiredAt:
+                    path: o.expiredAt
+            default:
+                name: '%pintushi_grid.extension.orm_sorter.class%::DIRECTION_ASC'
+        filters:
+            columns:
+                name:
+                    type: string
+                    path: o.name
+                createdAt:
+                    type: datetime
+                    path: o.createdAt
+        actions:
+            view:
+                type:          navigate
+                label:         pintushi.grid.action.view
+                link:          view_link
+                icon:          eye
+                acl_resource:  pintushi_organization_view
+                rowAction:     true
+            update:
+                type:          navigate
+                label:         pintushi.grid.action.update
+                link:          update_link
+                icon:          pencil-square-o
+                acl_resource:  pintushi_organization_update
+            delete:
+                type:          delete
+                label:         pintushi.grid.action.delete
+                link:          delete_link
+                icon:          trash-o
+                acl_resource:  pintushi_organization_delete

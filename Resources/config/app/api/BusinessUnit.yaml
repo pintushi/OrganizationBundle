@@ -1,7 +1,7 @@
 api:
     resources:
         Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
-            scope: pintushi
+            scope: pintushi_organization
             normalization_context:
                  groups: ["BusinessUnit"]
             validation_groups:  ["pintushi"]
@@ -12,7 +12,7 @@ api:
                     access_control: is_granted('pintushi_business_unit_create')
                 index:
                     action: index
-                    acl_enabled: true
+                    grid: business-unit-grid
                     access_control: is_granted('pintushi_business_unit_view')
                     normalization_context:
                        groups: ["Default", "BusinessUnit"]

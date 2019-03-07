@@ -194,4 +194,12 @@ class BusinessUnitRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('businessUnit');
     }
+
+    public function createListQueryBuilder()
+    {
+        return $this
+            ->createQueryBuilder('o')
+            ->leftJoin('o.owner')
+        ;
+    }
 }
