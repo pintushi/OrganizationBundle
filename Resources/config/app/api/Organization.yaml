@@ -1,19 +1,19 @@
 api:
     resources:
-        Pintushi\Bundle\CoreBundle\Entity\Organization:
+        Pintushi\Bundle\OrganizationBundle\Entity\Organization:
             scope: pintushi_organization
             normalization_context:
                 groups: [Organization]
             validation_groups:  ["pintushi"]
             route_prefix: /admin
-            form: App\Form\Type\OrganizationType
+            form: Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationType
             repository_class: 'Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository'
             operations:
                 create:
                     action: create
                     access_control: is_granted('pintushi_organization_create')
                     normalization_context:
-                        groups: [Organization, Address, ShippingMethod]
+                        groups: [Organization]
                 switch_organization:
                     action: view
                     path: /switch-organization/{id}
@@ -30,26 +30,25 @@ api:
                     action: update
                     access_control: is_granted('pintushi_organization_edit', object)
                     normalization_context:
-                        groups: [Organization, Address, ShippingMethod]
+                        groups: [Organization]
                 view:
                     action: view
                     access_control: is_granted('pintushi_organization_view', object)
                     normalization_context:
-                        groups: [Organization, Address, ShippingMethod]
+                        groups: [Organization]
                 get_profile:
                     action: view
                     path: '/profile'
-                    resource_provider: 'App\ResourceProvider\GetOrganization'
+                    resource_provider: "expr:service('pintushi_security.token_accessor').getOrganization()"
                     normalization_context:
-                        groups: [Organization, Address, ShippingMethod]
+                        groups: [Organization]
                 update_profile:
                     action: update
                     path: '/profile'
-                    resource_provider: 'App\ResourceProvider\GetOrganization'
+                    resource_provider: "expr:service('pintushi_security.token_accessor').getOrganization()"
                     access_control: is_granted('pintushi_organization_update_profile', object)
-                    form: 'App\Form\Type\GenericOrganizationType'
                     normalization_context:
-                        groups: [Organization, Address, ShippingMethod]
+                        groups: [Organization]
                 delete:
                     action: delete
                     access_control: is_granted('pintushi_organization_delete', object)

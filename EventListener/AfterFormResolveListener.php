@@ -5,10 +5,10 @@ namespace Pintushi\Bundle\OrganizationBundle\EventListener;
 use Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Videni\Bundle\RestBundle\Event\AfterFormResolveEvent;
-use Videni\Bundle\RestBundle\Operation\ActionTypes;
-use Symfony\Component\Routing\RouterInterface;
 use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OrganizationFormSubscriber;
+use Videni\Bundle\RestBundle\Operation\ActionTypes;
+use Videni\Bundle\RestBundle\Event\AfterFormResolveEvent;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

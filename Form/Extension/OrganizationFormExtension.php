@@ -67,6 +67,10 @@ class OrganizationFormExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if ($options['ownership_disabled']) {
+            return;
+        }
+
         $formConfig = $builder->getFormConfig();
         if (!$formConfig->getCompound()) {
             return;

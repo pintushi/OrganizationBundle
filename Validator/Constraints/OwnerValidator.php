@@ -16,12 +16,12 @@ use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\OwnerTreeProvider;
 use Pintushi\Bundle\UserBundle\Entity\User;
+use Pintushi\Bundle\SecurityBundle\Acl\AccessLevel;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Pintushi\Bundle\SecurityBundle\Acl\AccessLevel;
 
 /**
  * Validates that the current logged in user is granted to change the owner for an entity.
