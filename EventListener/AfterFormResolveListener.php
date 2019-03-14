@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- *  Redirect to organization selector page when create resource, if current organization is global
+ * Redirect to organization selector page when create resource,
+ * if current organization is global
  */
 class AfterFormResolveListener
 {
@@ -44,12 +45,26 @@ class AfterFormResolveListener
         $form = $event->getForm();
         $request = $event->getRequest();
 
-        if (ActionTypes::CREATE === $context->getAction() &&
-            in_array($request->getMethod(), ['POST', 'PUT', 'PATCH']) &&
-            $this->tokenAccessor->getOrganization()->isGlobal() &&
-            $this->hasOwnershipMetadata(get_class($event->getData())) &&
-            !$request->query->has(OrganizationFormSubscriber::QUERY_ID)
+        if ($form->getConfig()->getOption('ownership_disabled', true)) {
+            return;
+        }
+
+        if (ActionTypes::CREATE !== $context->getAction() ||
+            !in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])
         ) {
+            return;
+        }
+
+        $organization = $this->tokenAccessor->getOrganization();
+        if(null === $organization || !$organization->isGlobal()) {
+            return;
+        }
+
+        if (!$this->hasOwnershipMetadata(get_class($event->getData()))) {
+            return;
+        }
+
+        if (!$request->query->has(OrganizationFormSubscriber::QUERY_ID)) {
             $event->setResponse(
                 new JsonResponse([
                         'redirect' => $this->router->generate('api_organizations_select_organization')
