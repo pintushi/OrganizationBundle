@@ -60,7 +60,8 @@ class AfterFormResolveListener
             return;
         }
 
-        if (!$this->hasOwnershipMetadata(get_class($event->getData()))) {
+        $metadata = $this->hasOwnershipMetadata(get_class($event->getData()));
+        if (!$metadata ||!$metadata->hasOwner()) {
             return;
         }
 

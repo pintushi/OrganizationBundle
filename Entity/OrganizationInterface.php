@@ -18,7 +18,7 @@ interface OrganizationInterface extends
      *
      * @return integer
      */
-    public function getId(): int;
+    public function getId();
 
     /**
      * Set id

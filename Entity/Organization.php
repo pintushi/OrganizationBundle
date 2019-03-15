@@ -33,8 +33,6 @@ class Organization implements OrganizationInterface, ResourceInterface
 
     protected $global;
 
-    protected $subdomain;
-
     protected $description;
 
     protected $expiredAt;
@@ -59,7 +57,7 @@ class Organization implements OrganizationInterface, ResourceInterface
      *
      * @return integer
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -267,26 +265,6 @@ class Organization implements OrganizationInterface, ResourceInterface
     public function setLogo($logo)
     {
         $this->logo = $logo;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSubdomain()
-    {
-        return $this->subdomain;
-    }
-
-    /**
-     * @param mixed $subdomain
-     *
-     * @return self
-     */
-    public function setSubdomain($subdomain)
-    {
-        $this->subdomain = strtolower($subdomain);
 
         return $this;
     }

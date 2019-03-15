@@ -7,7 +7,7 @@ services:
     Pintushi\Bundle\OrganizationBundle\Form\Type\BusinessUnitSelectAutocomplete:
         arguments:
             - '@doctrine.orm.entity_manager'
-            - 'Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit'
+            - '%pintushi_organization.entity.business_unit.class%'
             - '@Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager'
         tags:
             - { name: form.type, alias: "pintushi_type_business_unit_select_autocomplete" }
@@ -16,11 +16,11 @@ services:
 
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationType:
         arguments:
-            - '%pintushi.entity.organization.class'
+            - '%pintushi_organization.entity.organization.class'
             - []
-            - '@pintushi.repository.organization'
+            - '@pintushi_organization.repository.organization'
 
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationProfileType:
         arguments:
-            - '%pintushi.entity.organization.class'
+            - '%pintushi_organization.entity.organization.class%'
             - []

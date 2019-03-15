@@ -34,13 +34,9 @@ final class OrganizationType extends AbstractResourceType
 
         $builder
             ->add('name', Type\TextType::class, [
-                    'required'    => true,
-                    'label'       => 'pintushi.organization.name.label',
-                    'constraints' => [
-                        new NotBlank()
-                    ]
-                ]
-            )
+                'required'    => true,
+                'label'       => 'pintushi.organization.name.label',
+            ])
             ->add('expiredAt', Type\DateTimeType::class, [
                 'widget'=>'single_text',
                 'label'    => 'pintushi.organization.expired_at.label',
@@ -48,7 +44,6 @@ final class OrganizationType extends AbstractResourceType
             ->add('enabled', Type\CheckboxType::class,  [
                 'required' => true,
                 'label'    => 'pintushi.organization.enabled.label',
-                'choices'  => ['Active' => 1, 'Inactive' => 0]
             ])
             ->add('description', Type\TextareaType::class, [
                 'required' => false,

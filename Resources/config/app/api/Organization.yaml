@@ -12,43 +12,31 @@ api:
                 create:
                     action: create
                     access_control: is_granted('pintushi_organization_create')
-                    normalization_context:
-                        groups: [Organization]
                 switch_organization:
                     action: view
                     path: /switch-organization/{id}
                     controller: Pintushi\Bundle\SecurityBundle\Controller\SwitchOrganizationAction
-                    defaults:
-                        id: 0
                 index:
                     action: index
-                    grid: orgnaization-grid
+                    grid: organization-grid
                     access_control: is_granted('pintushi_organization_view')
                     normalization_context:
                         groups: [Organization, Default]
                 update:
                     action: update
                     access_control: is_granted('pintushi_organization_edit', object)
-                    normalization_context:
-                        groups: [Organization]
                 view:
                     action: view
                     access_control: is_granted('pintushi_organization_view', object)
-                    normalization_context:
-                        groups: [Organization]
                 get_profile:
                     action: view
                     path: '/profile'
                     resource_provider: "expr:service('pintushi_security.token_accessor').getOrganization()"
-                    normalization_context:
-                        groups: [Organization]
                 update_profile:
                     action: update
                     path: '/profile'
                     resource_provider: "expr:service('pintushi_security.token_accessor').getOrganization()"
                     access_control: is_granted('pintushi_organization_update_profile', object)
-                    normalization_context:
-                        groups: [Organization]
                 delete:
                     action: delete
                     access_control: is_granted('pintushi_organization_delete', object)

@@ -1,0 +1,34 @@
+Pintushi\Bundle\OrganizationBundle\Entity\Organization:
+    exclusion_policy: ALL
+    xml_root_name: organization
+    properties:
+        id:
+            expose: true
+            type: integer
+            xml_attribute: true
+            groups: ['Organization']
+        name:
+            expose: true
+            type: string
+            xml_attribute: true
+            groups: ['Organization']
+        enabled:
+            expose: true
+            type: boolean
+            xml_attribute: true
+            groups: ['Organization']
+        expiredAt:
+            expose: true
+            type: DateTime
+            xml_attribute: true
+            groups: ['Organization']
+        description:
+            expose: true
+            type: string
+            xml_attribute: true
+            groups: ['Organization']
+        logo:
+            expose: true
+            type: string
+            xml_attribute: true
+            groups: ['Organization']
