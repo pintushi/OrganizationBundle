@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AfterFormResolveListener
 {
-      /** @var OwnershipMetadataProviderInterface */
+    /** @var OwnershipMetadataProviderInterface */
     protected $ownershipMetadataProvider;
 
     protected $doctrineHelper;
@@ -92,8 +92,6 @@ class AfterFormResolveListener
             return false;
         }
 
-        $metadata = $this->ownershipMetadataProvider->getMetadata($entity);
-
-        return $metadata->hasOwner();
+       return $this->ownershipMetadataProvider->getMetadata($entity);
     }
 }

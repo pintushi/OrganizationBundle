@@ -127,3 +127,7 @@ services:
         tags:
            - { name: "kernel.event_listener", event: 'videni.form_listener.after_form_resolve', method: 'onFormResolved' }
 
+    Pintushi\Bundle\OrganizationBundle\Grid\Extension\OrganizationExtension:
+        tags:
+            - { name: pintushi_grid.extension }
+
