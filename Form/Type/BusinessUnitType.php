@@ -2,41 +2,19 @@
 
 namespace Pintushi\Bundle\OrganizationBundle\Form\Type;
 
-use Pintushi\Bundle\FormBundle\Form\Type\EntityIdentifierType;
-use Pintushi\Bundle\OrganizationBundle\Entity\Manager\BusinessUnitManager;
-use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Videni\Bundle\RestBundle\Form\Type\AbstractResourceType;
 
 /**
  * Form for Business unit entity
  */
-class BusinessUnitType extends AbstractType
+class BusinessUnitType extends AbstractResourceType
 {
-    const FORM_NAME = 'pintushi_business_unit';
-
-    /** @var BusinessUnitManager */
-    protected $businessUnitManager;
-
-    /** @var TokenAccessorInterface */
-    protected $tokenAccessor;
-
-    /**
-     * @param BusinessUnitManager    $businessUnitManager
-     * @param TokenAccessorInterface $tokenAccessor
-     */
-    public function __construct(
-        BusinessUnitManager $businessUnitManager,
-        TokenAccessorInterface $tokenAccessor
-    ) {
-        $this->businessUnitManager = $businessUnitManager;
-        $this->tokenAccessor = $tokenAccessor;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -53,10 +31,19 @@ class BusinessUnitType extends AbstractType
             )
             ->add(
                 'parentBusinessUnit',
-                HiddenType::class,
+                BusinessUnitSelectAutocomplete::class,
                 [
                     'required' => false,
                     'label' => 'pintushi.organization.businessunit.parent.label',
+                    'autocomplete_alias' => 'business_units_owner_search_handler',
+                    'placeholder' => 'pintushi.business_unit.form.none_business_user',
+                    'configs' => [
+                        'multiple' => false,
+                        'component'   => 'tree-autocomplete',
+                        'width'       => '400px',
+                        'placeholder' => 'pintushi.dashboard.form.choose_business_unit',
+                        'allowClear'  => true
+                    ]
                 ]
             )
         ;
@@ -103,9 +90,10 @@ class BusinessUnitType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults(
             [
-                'data_class'              => 'Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit',
                 'ownership_disabled'      => true,
             ]
         );
@@ -116,6 +104,6 @@ class BusinessUnitType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return self::FORM_NAME;
+        return 'pintushi_business_unit';
     }
 }

@@ -20,6 +20,11 @@ services:
             - []
             - '@pintushi_organization.repository.organization'
 
+    Pintushi\Bundle\OrganizationBundle\Form\Type\BusinessUnitType:
+        arguments:
+            - '%pintushi_organization.entity.business_unit.class'
+            - []
+
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationProfileType:
         arguments:
             - '%pintushi_organization.entity.organization.class%'

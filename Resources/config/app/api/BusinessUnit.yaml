@@ -6,9 +6,16 @@ api:
                  groups: ["BusinessUnit"]
             validation_groups:  ["pintushi"]
             route_prefix: /admin
+            form: 'Pintushi\Bundle\OrganizationBundle\Form\Type\BusinessUnitType'
+            repository_class: 'Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository'
             operations:
                 create:
                     action: create
+                    access_control: is_granted('pintushi_business_unit_create')
+                create_form:
+                    action: create
+                    path: '/business_units/create-form'
+                    methods: ['GET']
                     access_control: is_granted('pintushi_business_unit_create')
                 index:
                     action: index
@@ -19,11 +26,13 @@ api:
                 update:
                     action: update
                     access_control: is_granted('pintushi_business_unit_edit', object)
+                update_form:
+                    action: update
+                    path: '/business_units/{id}/create-form'
+                    access_control: is_granted('pintushi_business_unit_edit', object)
                 view:
                     action: view
                     access_control: is_granted('pintushi_business_unit_view', object)
-                    normalization_context:
-                        groups: ["read", "Details"]
                 delete:
                     action: delete
                     access_control: is_granted('pintushi_business_unit_delete', object)
