@@ -32,7 +32,7 @@ services:
 
     pintushi_organization.autocomplete.parent_business_unit_search_handler:
         class: Pintushi\Bundle\OrganizationBundle\Autocomplete\ParentBusinessUnitSearchHandler
-        parent: pintushi_organization.autocomplete.business_unit_owner_search_handler
+        parent: 'Pintushi\Bundle\OrganizationBundle\Autocomplete\BusinessUnitOwnerSearchHandler'
         calls:
             - [setOwnerTreeProvider, ['@pintushi_security.ownership_tree_provider']]
         tags:

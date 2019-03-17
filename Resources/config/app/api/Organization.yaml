@@ -14,6 +14,9 @@ api:
                     access_control: is_granted('pintushi_organization_create')
                 switch_organization:
                     action: view
+                    access_control: is_granted('pintushi_organization_edit', object)
+                view:
+                    action: view
                     path: /switch-organization/{id}
                     controller: Pintushi\Bundle\SecurityBundle\Controller\SwitchOrganizationAction
                 index:
@@ -24,9 +27,6 @@ api:
                         groups: [Organization, Default]
                 update:
                     action: update
-                    access_control: is_granted('pintushi_organization_edit', object)
-                view:
-                    action: view
                     access_control: is_granted('pintushi_organization_view', object)
                 get_profile:
                     action: view
