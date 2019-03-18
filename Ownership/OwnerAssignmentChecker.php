@@ -4,7 +4,7 @@ namespace Pintushi\Bundle\OrganizationBundle\Ownership;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Pintushi\Component\DoctrineUtils\ORM\QueryBuilderUtil;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 /**
  * Default implementation of check owner assignment algorithm
