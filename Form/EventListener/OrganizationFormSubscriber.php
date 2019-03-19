@@ -15,7 +15,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class OrganizationFormSubscriber implements EventSubscriberInterface
 {
-    public const QUERY_ID= '_org_id';
+    public const QUERY_ID = '_org_id';
 
     protected $organizationField;
     protected $requestStack;

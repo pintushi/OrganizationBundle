@@ -15,6 +15,10 @@ api:
                 switch_organization:
                     action: view
                     access_control: is_granted('pintushi_organization_edit', object)
+                select_organization:
+                    action: view
+                    route_name: 'api_organizations_select_organization'
+                    access_control: is_granted('pintushi_organization_create', object)
                 view:
                     action: view
                     path: /switch-organization/{id}

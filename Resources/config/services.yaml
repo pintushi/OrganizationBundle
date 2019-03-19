@@ -10,7 +10,7 @@ services:
         public: false
 
     Pintushi\Bundle\OrganizationBundle\:
-        resource: '../../{Repository,DataFixtures,Command}'
+        resource: '../../{Repository,DataFixtures,Command,Controller}'
 
     Pintushi\Bundle\OrganizationBundle\Repository\BusinessUnitRepository:
         arguments:
