@@ -5,10 +5,13 @@ search:
         title_fields:                   [name]
         fields:
             -
+                name:                   id
+                target_type:            integer
+                target_fields:          [pintushi_organization_id]
+            -
                 name:                   name
                 target_type:            text
                 target_fields:          [name]
-
     Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
         alias:                          pintushi_business_unit
         search_template:                PintushiOrganizationBundle:Search:businessUnitResult.html.twig
@@ -17,7 +20,7 @@ search:
             -
                 name:                   id
                 target_type:            integer
-                target_fields:          [id]
+                target_fields:          [id, pintushi_business_unit_id]
             -
                 name:                   name
                 target_type:            text

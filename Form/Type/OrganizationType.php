@@ -37,6 +37,10 @@ final class OrganizationType extends AbstractResourceType
                 'required'    => true,
                 'label'       => 'pintushi.organization.name.label',
             ])
+            ->add('logo', Type\TextType::class, [
+                'required'    => false,
+                'label'       => 'pintushi.organization.logo.label',
+            ])
             ->add('expiredAt', Type\DateTimeType::class, [
                 'widget'=>'single_text',
                 'label'    => 'pintushi.organization.expired_at.label',
