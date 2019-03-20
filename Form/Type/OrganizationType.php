@@ -37,7 +37,7 @@ final class OrganizationType extends AbstractResourceType
                 'required'    => true,
                 'label'       => 'pintushi.organization.name.label',
             ])
-            ->add('logo', Type\TextType::class, [
+            ->add('logo', Type\HiddenType::class, [
                 'required'    => false,
                 'label'       => 'pintushi.organization.logo.label',
             ])
