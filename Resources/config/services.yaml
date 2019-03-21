@@ -131,3 +131,7 @@ services:
         tags:
             - { name: pintushi_grid.extension }
 
+    Pintushi\Bundle\OrganizationBundle\Hateoas\ConfigurationExtension\OwnershipRelationConfigurationExtension:
+        tags:
+            { name: 'hateoas.configuration_extension'}
+
