@@ -9,6 +9,7 @@ use Doctrine\ORM\Query;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
+use Pintushi\Bundle\UserBundle\Entity\User;
 
 class OrganizationRepository extends ServiceEntityRepository
 {
