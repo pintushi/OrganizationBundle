@@ -10,9 +10,12 @@ use Hateoas\Configuration\Metadata\ConfigurationExtensionInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Hateoas\Configuration\Route;
+use Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit;
 
 class OwnershipRelationConfigurationExtension implements ConfigurationExtensionInterface
 {
+    private $excluded = [ BusinessUnit::class];
+
     /** @var OwnershipMetadataProviderInterface */
     protected $ownershipMetadataProvider;
 
@@ -34,6 +37,11 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
         if (!$this->enabled) {
             return;
         }
+
+        if (in_array($classMetadata->getName(), $this->excluded)) {
+            return;
+        }
+
         $ownershipMetadata = $this->metadataProvider->getMetadata($classMetadata->getName());
         if ($ownershipMetadata) {
             $this->addOwnershipRelation($classMetadata, $ownershipMetadata);
