@@ -34,11 +34,11 @@ api:
                     access_control: is_granted('pintushi_organization_view', object)
                 get_profile:
                     action: view
-                    path: '/profile'
+                    path: '/organization/profile'
                     resource_provider: "expr:service('pintushi_security.token_accessor').getOrganization()"
                 update_profile:
                     action: update
-                    path: '/profile'
+                    path: '/organization/profile'
                     resource_provider: "expr:service('pintushi_security.token_accessor').getOrganization()"
                     access_control: is_granted('pintushi_organization_update_profile', object)
                 delete:

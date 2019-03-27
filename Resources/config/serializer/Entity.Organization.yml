@@ -17,6 +17,11 @@ Pintushi\Bundle\OrganizationBundle\Entity\Organization:
             type: boolean
             xml_attribute: true
             groups: ['Organization']
+        global:
+            expose: true
+            type: boolean
+            xml_attribute: true
+            groups: ['Organization']
         expiredAt:
             expose: true
             type: DateTime
