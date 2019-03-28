@@ -100,8 +100,7 @@ services:
            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
            - '@pintushi_security.owner.ownership_metadata_provider'
            - '@Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository'
-        calls:
-            - [setRequestStack, ['@request_stack']]
+           - '@request_stack'
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
 

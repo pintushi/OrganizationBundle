@@ -5,7 +5,7 @@ namespace Pintushi\Bundle\OrganizationBundle\EventListener;
 use Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
-use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OrganizationFormSubscriber;
+use Pintushi\Bundle\OrganizationBundle\Form\Extension\OrganizationFormExtension;
 use Videni\Bundle\RestBundle\Operation\ActionTypes;
 use Videni\Bundle\RestBundle\Event\AfterFormResolveEvent;
 use Symfony\Component\Routing\RouterInterface;
@@ -65,7 +65,7 @@ class AfterFormResolveListener
             return;
         }
 
-        if (!$request->query->has(OrganizationFormSubscriber::QUERY_ID)) {
+        if (!$request->query->has(OrganizationFormExtension::QUERY_ID)) {
             $event->setResponse(
                 new JsonResponse([
                         'redirect' => $this->router->generate('api_organizations_select_organization')

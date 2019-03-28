@@ -356,7 +356,6 @@ class OwnerFormExtension extends AbstractTypeExtension
                     $builder->get($this->fieldName)->addModelTransformer($transformer);
                 }
             }
-
         } else {
             $businessUnits = $user->getBusinessUnits();
             if (count($businessUnits)) {

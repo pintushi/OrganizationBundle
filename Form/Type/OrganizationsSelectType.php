@@ -88,14 +88,8 @@ class OrganizationsSelectType extends AbstractType
             function (FormEvent $event) {
                 $data = $event->getData();
 
-                if (!empty($data['organizations'])) {
-                    $organizations = json_decode(reset($data['organizations']), true);
-
-                    if (!$organizations['organizations'] && !empty($data['businessUnits'])) {
-                        $data['organizations'] = [$this->tokenAccessor->getOrganizationId()];
-                    } else {
-                        $data['organizations'] = $organizations['organizations'];
-                    }
+                if (empty($data['organizations'])) {
+                    $data['organizations'] = $this->tokenAccessor->getOrganizationId();
                 }
 
                 $event->setData($data);
@@ -132,7 +126,6 @@ class OrganizationsSelectType extends AbstractType
         $view->vars['organization_tree_ids'] = $buTree;
 
         /** @var PersistentCollection $businessUnitData */
-        $businessUnitData = $view->vars['data']->getBusinessUnits();
         if ($businessUnitData) {
             $businessUnitData = $businessUnitData->map(
                 function ($item) {
@@ -156,11 +149,11 @@ class OrganizationsSelectType extends AbstractType
     {
         $builder->add(
             'organizations',
-            EntityType::class,
+            OrganizationSelectType::class,
             [
-                'class'    => Organization::class,
-                'choice_label' => 'name',
-                'multiple' => true
+                'configs' => [
+                    'multiple' => true
+                ]
             ]
         );
     }

@@ -14,6 +14,11 @@ services:
 
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationsSelectType: ~
 
+    Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationSelectType:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '%pintushi_organization.entity.organization.class%'
+
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationType:
         arguments:
             - '%pintushi_organization.entity.organization.class'

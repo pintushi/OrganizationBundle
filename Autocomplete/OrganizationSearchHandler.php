@@ -57,12 +57,13 @@ class OrganizationSearchHandler implements SearchHandlerInterface
     public function search($query, $page, $perPage, $searchById = false)
     {
         $user = $this->tokenAccessor->getUser();
+        $global = $this->tokenAccessor->getOrganization()->isGlobal();
         /** @var OrganizationRepository $repository */
         $repository = $this->managerRegistry->getRepository($this->className);
         if (!$searchById) {
-            $items = $repository->getEnabledByUserAndName($user, $query);
+            $items = $global? $repository->getEnabledByName($query) : $repository->getEnabledByUserAndName($user, $query);
         } else {
-            $items = $repository->getEnabledUserOrganizationById($user, $query);
+            $items = $global? $repository->find($query) : $repository->getEnabledUserOrganizationById($user, $query);
         }
 
         $resultsData = [];

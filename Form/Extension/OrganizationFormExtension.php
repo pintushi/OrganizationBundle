@@ -19,14 +19,17 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\EntityOwnerAccessor;
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OwnerFormSubscriber;
-use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OrganizationFormSubscriber;
 use Videni\Bundle\RestBundle\Form\DataTransformer\EntityToIdTransformer;
 use Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationSelectType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OrganizationFormExtension extends AbstractTypeExtension
 {
+    public const QUERY_ID = '_org_id';
+
     /** @var TokenAccessorInterface */
     protected $tokenAccessor;
 
@@ -48,17 +51,14 @@ class OrganizationFormExtension extends AbstractTypeExtension
         AuthorizationCheckerInterface $authorizationChecker,
         DoctrineHelper $doctrineHelper,
         OwnershipMetadataProviderInterface $ownershipMetadataProvider,
-        OrganizationRepository $organizationRepository
+        OrganizationRepository $organizationRepository,
+        RequestStack $requestStack
     ) {
         $this->tokenAccessor = $tokenAccessor;
         $this->authorizationChecker = $authorizationChecker;
         $this->doctrineHelper = $doctrineHelper;
         $this->ownershipMetadataProvider = $ownershipMetadataProvider;
         $this->organizationRepository = $organizationRepository;
-    }
-
-    public function setRequestStack(RequestStack $requestStack)
-    {
         $this->requestStack = $requestStack;
     }
 
@@ -71,7 +71,7 @@ class OrganizationFormExtension extends AbstractTypeExtension
             return;
         }
 
-        $formConfig = $builder->getFormConfig();
+         $formConfig = $builder->getFormConfig();
         if (!$formConfig->getCompound()) {
             return;
         }
@@ -81,61 +81,50 @@ class OrganizationFormExtension extends AbstractTypeExtension
             return;
         }
 
-        $user = $this->tokenAccessor->getUser();
-        if (!$user) {
+        $metadata = $this->getMetadata($dataClassName);
+        if (!$metadata || !$metadata->hasOwner()) {
             return;
         }
 
-        $metadata = $this->getMetadata($dataClassName);
-        if (!$metadata  || !$metadata->hasOwner()) {
-            return;
-        }
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+
         // listener must be executed before validation
         $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit'], 128);
+    }
 
-        //show a disabled organization select for global organization
-        $isGlobalOrganization = $this->tokenAccessor->getOrganization()->isGlobal();
-        if (!$isGlobalOrganization) {
+    public function getExtendedType()
+    {
+        return FormType::class;
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function onPreSetData(FormEvent $event)
+    {
+        $entity = $event->getData();
+        $form   = $event->getForm();
+        $organizationFieldName = $this->getOrganizationFieldName($entity);
+        if (!$organizationFieldName) {
             return;
         }
-        $organizationField = $metadata->getOrganizationFieldName();
+        $propertyAccessor = $this->getPropertyAccessor();
 
-        if ($this->authorizationChecker->isGranted('VIEW', 'entity:'. Organization::class)) {
-            $builder->add($organizationField, OrganizationSelectType::class, [
-                'disabled' => true
-            ]);
+        if ($entity->getId() ) {
+            $organization = $propertyAccessor->getValue($entity, $organizationFieldName);
         } else {
-            $builder->add($organizationField, EntityType::class, [
-                'class'                => Organization::class,
-                'property'             => 'name',
-                'query_builder'        => function (OrgnaizationRepository $repository) use ($user) {
-                    $qb = $repository->createQueryBuilder('o');
-                    $qb->andWhere($qb->expr()->isMemberOf(':user', 'o.users'));
-                    $qb->setParameter('user', $user);
-
-                    return $qb;
-                },
-                'disabled'               => false,
-            ]);
+            $organization = $this->getOrganizationFromRequest();
+            $propertyAccessor->setValue($entity, $organizationFieldName, $organization);
         }
 
-        $builder->addEventSubscriber(new OrganizationFormSubscriber(
-            $organizationField,
-            $this->requestStack,
-            $this->organizationRepository,
-            $this->getPropertyAccessor()
-        ));
-
-        $isAssignGranted = $this->authorizationChecker->isGranted('ASSIGN', 'entity:'. $dataClassName);
-        $builder->addEventSubscriber(
-            new OwnerFormSubscriber(
-                $this->doctrineHelper,
-                $organizationField,
-                'pintushi.organiation.organization.label',
-                $isAssignGranted,
-                $this->tokenAccessor->getOrganization()
-            )
-        );
+       //add a read-only organization field, user not able to edit.
+       $form->add($organizationFieldName, TextType::class, [
+            'disabled' => true,
+            'data' =>  $organization ? $organization->getName() : '',
+            'mapped' => false,
+            'required' => false,
+            'label' => "pintushi.organization.organization.label"
+        ]);
     }
 
     /**
@@ -157,11 +146,34 @@ class OrganizationFormExtension extends AbstractTypeExtension
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'ownership_disabled' => false,
+            ]
+        );
+    }
+
+
+    protected function getOrganizationFromRequest()
+    {
+        $organizationId = $this->requestStack->getMasterRequest()->query->get(self::QUERY_ID);
+        if ($organizationId && $organization = $this->organizationRepository->find($organizationId)) {
+            return $organization;
+        }
+
+        return  null;
+    }
+
+    /**
      * @param object $entity
      */
     protected function updateOrganization($entity)
     {
-        $organizationField = $this->ownershipMetadataProvider->getMetadata(ClassUtils::getClass($entity))->getOrganizationFieldName();
+        $organizationField = $this->getOrganizationFieldName($entity);
         if (!$organizationField) {
             return;
         }
@@ -215,8 +227,12 @@ class OrganizationFormExtension extends AbstractTypeExtension
             : false;
     }
 
-    public function getExtendedType()
+    protected function getOrganizationFieldName($entity)
     {
-        return FormType::class;
+        if (!is_object($entity)) {
+            return null;
+        }
+
+        return $this->ownershipMetadataProvider->getMetadata(ClassUtils::getClass($entity))->getOrganizationFieldName();
     }
 }

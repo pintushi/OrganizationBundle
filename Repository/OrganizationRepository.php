@@ -63,6 +63,25 @@ class OrganizationRepository extends ServiceEntityRepository
         return $singleResult ? $query->getOneOrNullResult() : $query->getResult();
     }
 
+    public function getEnabledByName($name, $useLikeExpr = true, $singleResult = false)
+    {
+        $qb = $this->createQueryBuilder('org');
+        $qb->select('org')
+            ->where('org.enabled = true');
+
+        if ($useLikeExpr) {
+            $qb->andWhere($qb->expr()->like('org.name', ':orgName'))
+                ->setParameter('orgName', '%' . str_replace(' ', '%', $name) . '%');
+        } else {
+            $qb->andWhere($qb->expr()->eq('org.name', ':orgName'))
+                ->setParameter('orgName', $name);
+        }
+
+        $query = $qb->getQuery();
+
+        return $singleResult ? $query->getOneOrNullResult() : $query->getResult();
+    }
+
      /**
      * Get user organization by id
      *

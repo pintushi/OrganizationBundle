@@ -8,7 +8,7 @@ services:
             - '@doctrine'
             - '@pintushi_security.token_accessor'
         tags:
-            - { name: pintushi_form.autocomplete.search_handler, alias: user_organizations }
+            - { name: pintushi_form.autocomplete.search_handler, alias: organization }
         lazy: true
 
     Pintushi\Bundle\OrganizationBundle\Autocomplete\BusinessUnitOwnerSearchHandler:
