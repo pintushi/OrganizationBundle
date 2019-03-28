@@ -11,6 +11,7 @@ use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Hateoas\Configuration\Route;
 use Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Doctrine\Common\Util\ClassUtils;
 
 class OwnershipRelationConfigurationExtension implements ConfigurationExtensionInterface
 {
@@ -38,7 +39,7 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
             return;
         }
 
-        if (in_array($classMetadata->getName(), $this->excluded)) {
+        if (in_array(ClassUtils::getRealClass($classMetadata->getName()), $this->excluded)) {
             return;
         }
 
@@ -55,9 +56,15 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
 
     private function addOwnershipRelation(ClassMetadataInterface $classMetadata, OwnershipMetadataInterface $ownershipMetadata)
     {
+        $ownerFieldName = $ownershipMetadata->getOwnerFieldName();
+
         if ($ownershipMetadata->isUserOwned()) {
             $classMetadata->addRelation(
-                $this->createRelation($ownershipMetadata->getOwnerFieldName(), 'api_users_view', new Exclusion(['User']) )
+                $this->createRelation(
+                    $ownerFieldName,
+                    'api_users_view',
+                    new Exclusion(['User'], null, null, null, $this->getExcludeIf($ownerFieldName))
+                )
             );
             $classMetadata->addRelation(
                 $this->createOrganizationRelation($ownershipMetadata->getOrganizationFieldName())
@@ -67,7 +74,11 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
         }
         if ($ownershipMetadata->isBusinessUnitOwned()) {
             $classMetadata->addRelation(
-                $this->createRelation($ownershipMetadata->getOwnerFieldName(), 'api_business_units_view', new Exclusion(['BusinessUnit']))
+                $this->createRelation(
+                    $ownerFieldName,
+                    'api_business_units_view',
+                    new Exclusion(['BusinessUnit'], null, null, null, $this->getExcludeIf($ownerFieldName))
+                )
             );
             $classMetadata->addRelation(
                 $this->createOrganizationRelation($ownershipMetadata->getOrganizationFieldName())
@@ -78,7 +89,7 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
 
         if ($ownershipMetadata->isOrganizationOwned()) {
             $classMetadata->addRelation(
-                $this->createOrganizationRelation($ownershipMetadata->getOwnerFieldName())
+                $this->createOrganizationRelation($ownerFieldName)
             );
         }
     }
@@ -110,6 +121,14 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
             [],
             $exclusion
         );
+    }
+
+    private function getExcludeIf($ownerFieldName)
+    {
+        $getterName = $this->getFieldMethodName($ownerFieldName);
+        $excludeIf = sprintf("expr(null === object.%s())", $getterName);
+
+        return $excludeIf;
     }
 
     private function getFieldMethodName($fieldName)
