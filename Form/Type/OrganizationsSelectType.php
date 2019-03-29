@@ -124,20 +124,8 @@ class OrganizationsSelectType extends AbstractType
         );
 
         $view->vars['organization_tree_ids'] = $buTree;
-
-        /** @var PersistentCollection $businessUnitData */
-        if ($businessUnitData) {
-            $businessUnitData = $businessUnitData->map(
-                function ($item) {
-                    return $item->getId();
-                }
-            )->getValues();
-        }
-
         $view->vars['default_organization'] = $this->tokenAccessor->getOrganizationId();
         $view->vars['selected_organizations']  = [$this->tokenAccessor->getOrganizationId()];
-        $view->vars['selected_business_units'] = $businessUnitData;
-        $view->vars['accordion_enabled'] = $this->buManager->getTreeNodesCount($buTree) > 1000;
     }
 
     /**
