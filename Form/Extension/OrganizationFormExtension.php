@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Pintushi\Bundle\UserBundle\Entity\User;
 
 class OrganizationFormExtension extends AbstractTypeExtension
 {
@@ -43,6 +44,8 @@ class OrganizationFormExtension extends AbstractTypeExtension
     protected $propertyAccessor;
 
     private $requestStack;
+
+    private $currentUser;
 
     private $organizationRepository;
 
@@ -78,6 +81,11 @@ class OrganizationFormExtension extends AbstractTypeExtension
 
         $dataClassName = $formConfig->getDataClass();
         if (!$dataClassName) {
+            return;
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user) {
             return;
         }
 
@@ -117,13 +125,17 @@ class OrganizationFormExtension extends AbstractTypeExtension
             $propertyAccessor->setValue($entity, $organizationFieldName, $organization);
         }
 
+        if (null === $organization) {
+            $organization = $this->getCurrentUser()->getOrganization();
+        }
        //add a read-only organization field, user not able to edit.
        $form->add($organizationFieldName, TextType::class, [
             'disabled' => true,
             'data' =>  $organization ? $organization->getName() : '',
             'mapped' => false,
             'required' => false,
-            'label' => "pintushi.organization.organization.label"
+            'label' => "pintushi.organization.organization.label",
+            'attr' => ['disabled']
         ]);
     }
 
@@ -225,6 +237,21 @@ class OrganizationFormExtension extends AbstractTypeExtension
         return $metadata->hasOwner()
             ? $metadata
             : false;
+    }
+
+     /**
+     * @return null|User
+     */
+    protected function getCurrentUser()
+    {
+        if (null === $this->currentUser) {
+            $user = $this->tokenAccessor->getUser();
+            if ($user && is_object($user) && $user instanceof User) {
+                $this->currentUser = $user;
+            }
+        }
+
+        return $this->currentUser;
     }
 
     protected function getOrganizationFieldName($entity)
