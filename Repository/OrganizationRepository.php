@@ -31,7 +31,7 @@ class OrganizationRepository extends ServiceEntityRepository
         ;
     }
 
-      /**
+    /**
      * Returns user organizations by name
      *
      * @param User   $user

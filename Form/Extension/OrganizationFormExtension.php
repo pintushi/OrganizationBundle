@@ -15,54 +15,37 @@ use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Pintushi\Bundle\SecurityBundle\Owner\EntityOwnerAccessor;
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 use Pintushi\Bundle\OrganizationBundle\Form\EventListener\OwnerFormSubscriber;
 use Videni\Bundle\RestBundle\Form\DataTransformer\EntityToIdTransformer;
 use Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationSelectType;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Pintushi\Bundle\UserBundle\Entity\User;
 
 class OrganizationFormExtension extends AbstractTypeExtension
 {
-    public const QUERY_ID = '_org_id';
-
     /** @var TokenAccessorInterface */
     protected $tokenAccessor;
 
     protected $ownershipMetadataProvider;
-
-    protected $authorizationChecker;
 
     protected $doctrineHelper;
 
     /** @var PropertyAccessor */
     protected $propertyAccessor;
 
-    private $requestStack;
-
     private $currentUser;
-
-    private $organizationRepository;
 
     public function __construct(
         TokenAccessorInterface $tokenAccessor,
-        AuthorizationCheckerInterface $authorizationChecker,
         DoctrineHelper $doctrineHelper,
-        OwnershipMetadataProviderInterface $ownershipMetadataProvider,
-        OrganizationRepository $organizationRepository,
-        RequestStack $requestStack
+        OwnershipMetadataProviderInterface $ownershipMetadataProvider
     ) {
         $this->tokenAccessor = $tokenAccessor;
-        $this->authorizationChecker = $authorizationChecker;
         $this->doctrineHelper = $doctrineHelper;
         $this->ownershipMetadataProvider = $ownershipMetadataProvider;
-        $this->organizationRepository = $organizationRepository;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -118,20 +101,17 @@ class OrganizationFormExtension extends AbstractTypeExtension
         }
         $propertyAccessor = $this->getPropertyAccessor();
 
-        if ($entity->getId() ) {
-            $organization = $propertyAccessor->getValue($entity, $organizationFieldName);
-        } else {
-            $organization = $this->getOrganizationFromRequest();
-            $propertyAccessor->setValue($entity, $organizationFieldName, $organization);
-        }
+        $organization = $propertyAccessor->getValue($entity, $organizationFieldName);
 
         if (null === $organization) {
             $organization = $this->getCurrentUser()->getOrganization();
+            $propertyAccessor->setValue($entity, $organizationFieldName, $organization);
         }
+
        //add a read-only organization field, user not able to edit.
        $form->add($organizationFieldName, TextType::class, [
             'disabled' => true,
-            'data' =>  $organization ? $organization->getName() : '',
+            'data' => $organization->getName(),
             'mapped' => false,
             'required' => false,
             'label' => "pintushi.organization.organization.label",
@@ -167,17 +147,6 @@ class OrganizationFormExtension extends AbstractTypeExtension
                 'ownership_disabled' => false,
             ]
         );
-    }
-
-
-    protected function getOrganizationFromRequest()
-    {
-        $organizationId = $this->requestStack->getMasterRequest()->query->get(self::QUERY_ID);
-        if ($organizationId && $organization = $this->organizationRepository->find($organizationId)) {
-            return $organization;
-        }
-
-        return  null;
     }
 
     /**

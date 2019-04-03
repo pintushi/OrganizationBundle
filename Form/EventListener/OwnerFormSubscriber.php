@@ -67,6 +67,7 @@ class OwnerFormSubscriber implements EventSubscriberInterface
 
         $isEntityExists = false;
         $entity = $event->getData();
+
         if ($entity) {
             if (!is_object($entity)) {
                 return;
@@ -109,7 +110,8 @@ class OwnerFormSubscriber implements EventSubscriberInterface
                 'data' => $ownerData ?: '',
                 'mapped' => false,
                 'required' => false,
-                'label' => $this->fieldLabel
+                'label' => $this->fieldLabel,
+                'attr' => ['disabled']
             )
         );
     }

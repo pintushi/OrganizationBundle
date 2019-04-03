@@ -17,18 +17,6 @@ class BusinessUnitOwnerSearchHandler extends SearchHandler
         $this->doctrine = $doctrine;
     }
 
-    public function search($query, $page, $perPage, $searchById = false)
-    {
-        list($search, $organizationId) = strpos(';', $query) ? explode(';', $query, 2): [$query, null];
-
-        $data = parent::search($search, $page, $perPage, $searchById);
-
-        return [
-            'results' => $organizationId ? $this->filterByOrganization($organizationId, $data['results']): $data['results'],
-            'more'  => $data['more']
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -61,17 +49,5 @@ class BusinessUnitOwnerSearchHandler extends SearchHandler
         }
 
         return $path;
-    }
-
-    private function filterByOrganization($organizationId, $results = [])
-    {
-        $filteredResults = [];
-        foreach($data['results'] as $result) {
-            if ($result['organization_id'] == $organizationId) {
-                $filteredResults[] = $result;
-            }
-        }
-
-       return $filteredResults;
     }
 }

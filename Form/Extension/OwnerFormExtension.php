@@ -21,7 +21,6 @@ use Pintushi\Bundle\SecurityBundle\Acl\Domain\OneShotIsGrantedObserver;
 use Pintushi\Bundle\SecurityBundle\Acl\Voter\AclVoter;
 use Pintushi\Bundle\SecurityBundle\Owner\EntityOwnerAccessor;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataInterface;
-use Pintushi\Bundle\SecurityBundle\Owner\OwnerTreeProvider;
 use Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper;
 use Pintushi\Bundle\EntityConfigBundle\Tools\ConfigHelper;
 use Pintushi\Bundle\UserBundle\Entity\User;
@@ -73,9 +72,6 @@ class OwnerFormExtension extends AbstractTypeExtension
     /** @var AclVoter */
     protected $aclVoter;
 
-    /** @var OwnerTreeProvider */
-    protected $treeProvider;
-
     /** @var EntityOwnerAccessor */
     protected $entityOwnerAccessor;
 
@@ -86,7 +82,6 @@ class OwnerFormExtension extends AbstractTypeExtension
      * @param AuthorizationCheckerInterface      $authorizationChecker
      * @param TokenAccessorInterface             $tokenAccessor
      * @param AclVoter                           $aclVoter
-     * @param OwnerTreeProvider                  $treeProvider
      * @param EntityOwnerAccessor                $entityOwnerAccessor
      */
     public function __construct(
@@ -96,7 +91,6 @@ class OwnerFormExtension extends AbstractTypeExtension
         AuthorizationCheckerInterface $authorizationChecker,
         TokenAccessorInterface $tokenAccessor,
         AclVoter $aclVoter,
-        OwnerTreeProvider $treeProvider,
         EntityOwnerAccessor $entityOwnerAccessor
     ) {
         $this->doctrineHelper = $doctrineHelper;
@@ -105,7 +99,6 @@ class OwnerFormExtension extends AbstractTypeExtension
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenAccessor = $tokenAccessor;
         $this->aclVoter = $aclVoter;
-        $this->treeProvider = $treeProvider;
         $this->entityOwnerAccessor = $entityOwnerAccessor;
     }
 
@@ -429,19 +422,6 @@ class OwnerFormExtension extends AbstractTypeExtension
         }
 
         return $this->currentUser;
-    }
-
-    /**
-     * @return bool|Organization
-     */
-    protected function getCurrentOrganization()
-    {
-        $businessUnit = $this->getCurrentBusinessUnit($this->getOrganization());
-        if (!$businessUnit) {
-            return true;
-        }
-
-        return $businessUnit->getOrganization();
     }
 
     /**

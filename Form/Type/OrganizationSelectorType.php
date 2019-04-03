@@ -8,14 +8,14 @@ use Symfony\Component\Form\AbstractType;
 use Pintushi\Bundle\AutoBundle\Entity\CarModel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationSelectType;
-use Pintushi\Bundle\OrganizationBundle\Form\Extension\OrganizationFormExtension;
+use Pintushi\Bundle\OrganizationBundle\Provider\RequestBasedOrganizationProvider;
 
 class OrganizationSelectorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add(OrganizationFormExtension::QUERY_ID, OrganizationSelectType::class)
+            ->add(RequestBasedOrganizationProvider::QUERY_ID, OrganizationSelectType::class)
         ;
     }
 

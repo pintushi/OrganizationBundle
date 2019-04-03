@@ -88,21 +88,18 @@ services:
            - '@security.authorization_checker'
            - '@pintushi_security.token_accessor'
            - '@pintushi.acl.voter.basic_permissions'
-           - '@pintushi_security.ownership_tree_provider'
            - '@pintushi_security.owner.entity_owner_accessor'
         tags:
-            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType', priority: 0 }
 
+    # Make sure OrganizationFormExtension is loaded before OwnerFormExtension
     Pintushi\Bundle\OrganizationBundle\Form\Extension\OrganizationFormExtension:
         arguments:
            - '@pintushi_security.token_accessor'
-           - '@security.authorization_checker'
            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
            - '@pintushi_security.owner.ownership_metadata_provider'
-           - '@Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository'
-           - '@request_stack'
         tags:
-            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType', priority: 100}
 
 
     Pintushi\Bundle\OrganizationBundle\Form\Type\OrganizationType:
@@ -122,9 +119,9 @@ services:
     Pintushi\Bundle\OrganizationBundle\DataPersister\DataPersister:
         decorates: Videni\Bundle\RestBundle\EventListener\DataPersister
 
-    Pintushi\Bundle\OrganizationBundle\EventListener\AfterFormResolveListener:
+    Pintushi\Bundle\OrganizationBundle\EventListener\ResourceOrganizationListener:
         tags:
-           - { name: "kernel.event_listener", event: 'videni.form_listener.after_form_resolve', method: 'onFormResolved' }
+            - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest', priority: 3 }
 
     Pintushi\Bundle\OrganizationBundle\Grid\Extension\OrganizationExtension:
         tags:
@@ -133,4 +130,9 @@ services:
     Pintushi\Bundle\OrganizationBundle\Hateoas\ConfigurationExtension\OwnershipRelationConfigurationExtension:
         tags:
             { name: 'hateoas.configuration_extension'}
+
+    Pintushi\Bundle\OrganizationBundle\Provider\RequestBasedOrganizationProvider:
+        arguments:
+            - '%pintushi_organization.entity.organization.class%'
+
 
