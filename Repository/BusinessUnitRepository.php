@@ -27,14 +27,25 @@ class BusinessUnitRepository extends ServiceEntityRepository
      *
      * @return BusinessUnit
      */
-    public function getFirst()
+    public function getFirst($organization = null)
     {
-        return $this->createQueryBuilder('businessUnit')
+        $qb = $this->createQueryBuilder('businessUnit')
             ->select('businessUnit')
             ->orderBy('businessUnit.id')
+            ;
+
+        if ($organization) {
+            $qb
+                ->andWhere('IDENTITY(businessUnit.organization)=:organization')
+                ->setParameter('organization', $organization->getId())
+            ;
+        }
+
+        return $qb
             ->getQuery()
             ->setMaxResults(1)
-            ->getSingleResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**

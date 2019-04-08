@@ -5,7 +5,6 @@ namespace Pintushi\Bundle\OrganizationBundle\EventListener;
 use Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Pintushi\Bundle\OrganizationBundle\Form\Extension\OrganizationFormExtension;
-use Videni\Bundle\RestBundle\Operation\ActionTypes;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Pintushi\Bundle\OrganizationBundle\Provider\RequestBasedOrganizationProvider;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Videni\Bundle\RestBundle\Context\ResourceContextStorage;
+use Videni\Bundle\RestBundle\Operation\ActionTypes;
 
 /**
  * Resolve organization for ownership resource
@@ -82,7 +82,7 @@ class ResourceOrganizationListener
             return;
         }
 
-        if (!$this->authorizationChecker->isGranted('ASSIGN', 'entity:'.get_class($data))) {
+        if (!$this->authorizationChecker->isGranted('CREATE', 'entity:'.get_class($data))) {
             return;
         }
 
