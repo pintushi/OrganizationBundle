@@ -37,3 +37,28 @@ Pintushi\Bundle\OrganizationBundle\Entity\Organization:
             type: string
             xml_attribute: true
             groups: ['Organization']
+    relations:
+        -   rel: view
+            href:
+                route: api_organizations_view
+                parameters:
+                    id: expr(object.getId())
+            exclusion:
+                groups: [Organization]
+                exclude_if: "expr(!is_granted('pintushi_organization_view', object))"
+        -   rel: delete
+            href:
+                route: api_organizations_delete
+                parameters:
+                    id: expr(object.getId())
+            exclusion:
+                groups: [Organization]
+                exclude_if: "expr(!is_granted('pintushi_organization_update', object))"
+        -   rel: update
+            href:
+                route: api_organizations_view
+                parameters:
+                    id: expr(object.getId())
+            exclusion:
+                groups: [Organization]
+                exclude_if: "expr(!is_granted('pintushi_organization_delete', object))"

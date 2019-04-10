@@ -20,12 +20,19 @@ acls:
         permission: 'DELETE'
         category: "organization"
 
-    pintushi_organization_edit:
+    pintushi_organization_update:
         type: entity
         class: Pintushi\Bundle\OrganizationBundle\Entity\Organization
         label: '编辑组织'
         permission: 'EDIT'
         category: "organization"
+
+    pintushi_organization_switch:
+        label: "切换租户"
+        description: "切换租户"
+        type: action
+        group_name: ""
+        category: "application"
 
     pintushi_business_unit_create:
         type: entity

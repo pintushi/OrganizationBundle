@@ -98,6 +98,7 @@ class OwnershipRelationConfigurationExtension implements ConfigurationExtensionI
     {
         $getterName = $this->getFieldMethodName($relationName);
 
+        //only global organization user can see organization field
         return $this->createRelation(
             $relationName,
             'api_organizations_view',
