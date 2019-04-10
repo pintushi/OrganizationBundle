@@ -16,6 +16,7 @@ use Pintushi\Bundle\OrganizationBundle\Provider\RequestBasedOrganizationProvider
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Videni\Bundle\RestBundle\Context\ResourceContextStorage;
 use Videni\Bundle\RestBundle\Operation\ActionTypes;
+use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 /**
  * Resolve organization for ownership resource
@@ -37,13 +38,16 @@ class ResourceOrganizationListener
 
     protected $requestBasedOrganizationProvider;
 
+    protected $tokenAccessor;
+
     public function __construct(
         OwnershipMetadataProviderInterface $ownershipMetadataProvider,
         DoctrineHelper $doctrineHelper,
         AuthorizationCheckerInterface $authorizationChecker,
         RouterInterface $router,
         ResourceContextStorage $resourceContextStorage,
-        RequestBasedOrganizationProvider $requestBasedOrganizationProvider
+        RequestBasedOrganizationProvider $requestBasedOrganizationProvider,
+        TokenAccessorInterface $tokenAccessor
     )  {
         $this->ownershipMetadataProvider = $ownershipMetadataProvider;
         $this->doctrineHelper = $doctrineHelper;
@@ -51,6 +55,7 @@ class ResourceOrganizationListener
         $this->authorizationChecker = $authorizationChecker;
         $this->resourceContextStorage = $resourceContextStorage;
         $this->requestBasedOrganizationProvider = $requestBasedOrganizationProvider;
+        $this->tokenAccessor = $tokenAccessor;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -79,6 +84,21 @@ class ResourceOrganizationListener
         $data = $request->attributes->get('data');
         $metadata = $this->hasOwnershipMetadata(get_class($data));
         if (!$metadata ||!$metadata->hasOwner()) {
+            return;
+        }
+
+        $user = $this->tokenAccessor->getUser();
+        if(null === $user) {
+            return;
+        }
+
+        $userOrganization = $this->tokenAccessor->getOrganization();
+        if(null === $userOrganization) {
+            return;
+        }
+
+        //only global organization user can be redirected to organization selector page
+        if (!$userOrganization->isGlobal()) {
             return;
         }
 

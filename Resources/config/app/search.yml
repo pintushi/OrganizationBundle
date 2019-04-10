@@ -12,6 +12,7 @@ search:
                 name:                   name
                 target_type:            text
                 target_fields:          [name]
+
     Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
         alias:                          pintushi_business_unit
         search_template:                PintushiOrganizationBundle:Search:businessUnitResult.html.twig

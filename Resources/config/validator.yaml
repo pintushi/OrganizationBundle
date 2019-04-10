@@ -27,3 +27,10 @@ services:
            - '@pintushi_security.ownership_tree_provider'
         tags:
             - { name: validator.constraint_validator, alias: parent_business_unit_validator }
+
+    Pintushi\Bundle\OrganizationBundle\Validator\Constraints\EntityOwnedByOrganizationValidator:
+        arguments:
+           - '@pintushi_security.owner.ownership_metadata_provider'
+           - '@security.authorization_checker'
+        tags:
+            - { name: validator.constraint_validator}

@@ -8,6 +8,10 @@ use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Get organization from request for global organization user
+ * when it is necessary
+ */
 class RequestBasedOrganizationProvider
 {
     const QUERY_ID = '_org_id';
@@ -90,17 +94,15 @@ class RequestBasedOrganizationProvider
             return null;
         }
 
+        //only global user can resolve organiation from request
+        if(!$userOrganization->isGlobal()) {
+            return null;
+        }
+
         if (!$this->isViewPermissionGrantedOnOrganizationClass()) {
             return null;
         }
 
-        $organization = null;
-        if(!$userOrganization->isGlobal()) {
-            $organization = $this->organizationRepository->getEnabledUserOrganizationById($this->tokenAccessor->getUser(), $organizationId)->first();
-        } else  {
-            $organization = $this->organizationRepository->findOneBy(['id'=> $organizationId, 'enabled' => true]);
-        }
-
-        return $organization;
+        return $this->organizationRepository->findOneBy(['id'=> $organizationId, 'enabled' => true]);
     }
 }

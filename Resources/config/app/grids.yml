@@ -1,6 +1,6 @@
 grids:
     business-unit-grid:
-        extended_entity_name: '%pintushi_organization.entity.business_unit.class%'
+        entity_class: '%pintushi_organization.entity.business_unit.class%'
         options:
             entityHint: business
             entity_pagination: true
@@ -70,7 +70,7 @@ grids:
                 acl_resource:  pintushi_business_unit_delete
 
     organization-grid:
-        extended_entity_name: '%pintushi_organization.entity.organization.class%'
+        entity_class: '%pintushi_organization.entity.organization.class%'
         options:
             entityHint: organization
             entity_pagination: true
