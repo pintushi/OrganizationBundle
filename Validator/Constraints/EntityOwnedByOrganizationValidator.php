@@ -65,14 +65,14 @@ class EntityOwnedByOrganizationValidator extends ConstraintValidator
         }
     }
 
-    protected function validateOrganization($field, $fieldValue, $organization, $constraint)
+    protected function validateOrganization($field, $fieldValue, $expectedOrganization, $constraint)
     {
         $fieldOrganization = $this->getOrganization($fieldValue);
-        if ($fieldOrganization !== $organization) {
+        if ($fieldOrganization !== $expectedOrganization) {
              $this->context
                 ->buildViolation($constraint->message)
                 ->atPath($field)
-                ->setParameter('{{organizationName}}', $organization->getName())
+                ->setParameter('{{organizationName}}', $expectedOrganization->getName())
                 ->setParameter('{{target}}', $field)
                 ->addViolation();
         }
