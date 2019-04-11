@@ -46,17 +46,17 @@ Pintushi\Bundle\OrganizationBundle\Entity\Organization:
             exclusion:
                 groups: [Organization]
                 exclude_if: "expr(!is_granted('pintushi_organization_view', object))"
-        -   rel: delete
+        -   rel: update
             href:
-                route: api_organizations_delete
+                route: api_organizations_update
                 parameters:
                     id: expr(object.getId())
             exclusion:
                 groups: [Organization]
                 exclude_if: "expr(!is_granted('pintushi_organization_update', object))"
-        -   rel: update
+        -   rel: delete
             href:
-                route: api_organizations_view
+                route: api_organizations_delete
                 parameters:
                     id: expr(object.getId())
             exclusion:

@@ -1,0 +1,19 @@
+Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit:
+    exclusion_policy: ALL
+    xml_root_name: business_unit
+    properties:
+        id:
+            expose: true
+            type: integer
+            xml_attribute: true
+            groups: ['BusinessUnit']
+        name:
+            expose: true
+            type: string
+            xml_attribute: true
+            groups: ['BusinessUnit']
+        owner:
+            expose: true
+            type: Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit
+            groups: ['BusinessUnit']
+            max-depth: 1
